@@ -66,13 +66,40 @@ document.addEventListener('DOMContentLoaded', () => {
     el.addEventListener('pointerdown', () => play('tap'));
   });
 
-  // ── Sound: cards ─────────────────────────────────────────────────────
-  document.querySelectorAll('.card').forEach(el => {
-    el.addEventListener('mouseenter', () => play('hover'));
-  });
-  document.querySelectorAll('.card-link').forEach(el => {
-    el.addEventListener('mouseenter', () => play('hover'));
-    el.addEventListener('pointerdown', () => play('tap'));
+  // ── Card hover: video play + mute button ─────────────────────────────
+  document.querySelectorAll('.card').forEach(card => {
+    const video   = card.querySelector('video');
+    const muteBtn = card.querySelector('.mute-btn');
+    let hideTimer = null;
+
+    function showMute() {
+      clearTimeout(hideTimer);
+      card.classList.add('show-mute');
+      hideTimer = setTimeout(() => card.classList.remove('show-mute'), 2000);
+    }
+
+    card.addEventListener('mouseenter', () => {
+      play('hover');
+      if (video) video.play().catch(() => {});
+      if (muteBtn) showMute();
+    });
+
+    card.addEventListener('mouseleave', () => {
+      if (video) { video.pause(); video.currentTime = 0; }
+      clearTimeout(hideTimer);
+      card.classList.remove('show-mute');
+    });
+
+    if (muteBtn && video) {
+      muteBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        play('tap');
+        video.muted = !video.muted;
+        muteBtn.querySelector('.icon-muted').style.display   = video.muted ? '' : 'none';
+        muteBtn.querySelector('.icon-unmuted').style.display = video.muted ? 'none' : '';
+        showMute();
+      });
+    }
   });
 
   // ── Sound: orb + theme btn ───────────────────────────────────────────

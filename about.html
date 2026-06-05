@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Matt Silverman — About</title>
+  <meta name="description" content="About Matt Silverman, product designer based in San Diego.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;700&family=Geist+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script>
+    (function(){
+      var t = localStorage.getItem('theme') || 'light';
+      document.documentElement.setAttribute('data-theme', t);
+      document.documentElement.classList.add('no-transition');
+      window.addEventListener('load', function(){
+        setTimeout(function(){ document.documentElement.classList.remove('no-transition'); }, 50);
+      });
+    })();
+  </script>
+  <style>
+    /* ── Terminal-Bio component ─────────────────────────────────────────── */
+    #tb-wrap {
+      display: flex; flex-direction: column; align-items: center;
+    }
+    #tb-terminal {
+      width: 422px; height: 422px;
+      flex-shrink: 0;       /* never shrink from 422×422 */
+      background: #101010;
+      border-radius: 10px;
+      display: flex; flex-direction: column;
+      overflow: hidden;
+      transition: background .35s;
+    }
+    [data-theme=light]  #tb-terminal { background: #fcfcfc; }
+    [data-theme=dark]   #tb-terminal { background: #101010; }
+
+    #tb-body {
+      flex: 1;
+      min-height: 0;
+      padding: 28px 32px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;   /* vertically center the output block */
+    }
+    #tb-output {
+      font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+      font-size: 10px; line-height: 2.0;
+      color: #abb2bf;
+      width: 300px; margin: 0 auto;
+      transition: color .35s;
+    }
+    [data-theme=light] #tb-output { color: #605850; }
+
+    #tb-output .line { display: block; }
+    #tb-output .p  { color: #4b5263; }
+    #tb-output .v  { color: #61afef; }
+    #tb-output .m  { color: #5c6370; }
+    #tb-output .d  { color: #3e4451; }
+    #tb-output .g  { color: #56b6c2; }
+    #tb-output .mk { color: #f97316; }
+
+    [data-theme=light] #tb-output .p  { color: #a09080; }
+    [data-theme=light] #tb-output .v  { color: #1a5a9e; }
+    [data-theme=light] #tb-output .m  { color: #706878; }
+    [data-theme=light] #tb-output .d  { color: #a09080; }
+    [data-theme=light] #tb-output .g  { color: #1e7a58; }
+    [data-theme=light] #tb-output .mk { color: #c24d08; }
+
+    #tb-output .cursor {
+      display: inline-block;
+      width: 5px; height: 12px;
+      background: #f97316;
+      vertical-align: text-bottom; margin-left: 2px;
+      animation: blink 1s step-end infinite;
+    }
+    [data-theme=light] #tb-output .cursor { background: #c24d08; }
+
+    #tb-bottom {
+      display: flex; flex-direction: column; align-items: center;
+      padding-bottom: 18px; gap: 7px;
+    }
+    #tb-controls {
+      display: flex; align-items: center; gap: 18px;
+    }
+    #tb-scenes {
+      display: flex; align-items: center;
+    }
+    #tb-scene-current {
+      font-family: 'Geist Mono', monospace;
+      font-size: 12px; font-weight: 300;
+      letter-spacing: 0.04em;
+      color: rgba(255,255,255,0.30);
+      user-select: none;
+      text-transform: lowercase;
+      transition: opacity .15s;
+    }
+    [data-theme=light] #tb-scene-current { color: rgba(0,0,0,0.30); }
+    .tb-paddle {
+      background: none; border: none; cursor: pointer;
+      color: rgba(255,255,255,0.18);
+      padding: 4px 8px; border-radius: 3px;
+      display: flex; align-items: center; justify-content: center;
+      transition: color .15s; user-select: none;
+    }
+    .tb-paddle:hover  { color: rgba(255,255,255,0.42); }
+    .tb-paddle:active { color: rgba(255,255,255,0.72); }
+    [data-theme=light] .tb-paddle        { color: rgba(0,0,0,0.20); }
+    [data-theme=light] .tb-paddle:hover  { color: rgba(0,0,0,0.48); }
+    [data-theme=light] .tb-paddle:active { color: rgba(0,0,0,0.72); }
+
+    /* ── About bio section ──────────────────────────────────────────────── */
+    .about-main {
+      min-height: 100vh;
+      padding: 0 64px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    @media (max-width: 768px) { .about-main { padding: 0 32px; } }
+
+    .about-content {
+      width: 422px;
+      display: flex; flex-direction: column; gap: 48px;
+      align-items: center;
+    }
+    @media (max-width: 480px) { .about-content { width: 100%; } }
+
+    .about-bio {
+      font-family: 'Geist', sans-serif;
+      font-size: 12px; font-weight: 400;
+      line-height: 24px; letter-spacing: 0.04em;
+      color: var(--fg);
+      width: 100%;
+    }
+
+    /* ── Badge ──────────────────────────────────────────────────────────── */
+    .badge-container {
+      perspective: 1000px;
+      cursor: pointer;
+      display: inline-flex;
+      position: relative;
+    }
+
+    /* Dot: filled → outlined on expand */
+    .badge-dot {
+      transition: background .25s, box-shadow .25s;
+    }
+    .badge-container.expanded .badge-dot {
+      background: transparent;
+      box-shadow: inset 0 0 0 1.5px var(--fg);
+    }
+
+    /* Satellite dots */
+    @keyframes starShoot {
+      0%   { opacity: 0; transform: translate(-50%,-50%) scale(0); }
+      18%  { opacity: 1; }
+      72%  { transform: translate(calc(-50% + var(--dx)*1.32), calc(-50% + var(--dy)*1.32)) scale(1.25); }
+      100% { transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(1); opacity: 1; }
+    }
+
+    .sat {
+      position: absolute;
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--fg);
+      top: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      opacity: 0;
+      cursor: pointer;
+      pointer-events: none;
+      transition: transform .3s ease-in, opacity .2s ease-in;
+      /* larger hitbox via outline-offset trick */
+      outline: 10px solid transparent;
+    }
+    .sat.sat-l { left: 0; }
+    .sat.sat-r { left: 100%; }
+
+    .badge-container.expanded .sat {
+      pointer-events: auto;
+      animation: starShoot .75s ease-out both;
+      animation-delay: var(--d, 0ms);
+    }
+
+    /* Photo tooltip */
+    .sat-photo {
+      position: absolute;
+      width: 72px; height: 72px;
+      border-radius: 10px;
+      background: #444;
+      left: 50%;
+      bottom: calc(100% + 10px);
+      transform: translate(-50%, 6px) scale(0.85);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .2s, transform .2s;
+    }
+    .sat:hover .sat-photo {
+      opacity: 1;
+      transform: translate(-50%, 0) scale(1);
+    }
+
+    .badge {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 10px;
+      width: 266px;
+      padding: 10px 14px 10px 10px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.72);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border: 1px solid rgba(255,255,255,0.80);
+      box-shadow: 0 8px 40px rgba(0,0,0,0.10), 0 2px 8px rgba(0,0,0,0.06);
+      box-sizing: border-box;
+      transform-style: preserve-3d;
+      will-change: transform;
+      transition: transform .3s ease-out;
+    }
+    [data-theme=dark] .badge {
+      background: rgba(28,28,30,0.72);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 8px 40px rgba(0,0,0,0.60), 0 2px 8px rgba(0,0,0,0.30);
+    }
+
+    .badge-avatar {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      overflow: hidden;
+      flex-shrink: 0;
+      background: #1a1a1a;
+      box-shadow: 0 0 0 1.5px rgba(0,0,0,0.12);
+    }
+    [data-theme=dark] .badge-avatar {
+      box-shadow: 0 0 0 1.5px rgba(255,255,255,0.18);
+    }
+
+    .badge-avatar > div { width: 36px; height: 36px; display: block; }
+    .badge-avatar canvas { display: block; }
+
+    .badge-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      flex: 1;
+    }
+
+    .badge-name {
+      font-family: 'Geist Mono', monospace;
+      font-size: 13px; font-weight: 400;
+      letter-spacing: 0.04em; line-height: 1.4;
+      color: var(--fg); white-space: nowrap;
+    }
+
+    .badge-sub {
+      font-family: 'Geist Mono', monospace;
+      font-size: 10px; font-weight: 300;
+      letter-spacing: 0.04em; line-height: 1.4;
+      color: var(--fg-50); white-space: nowrap;
+    }
+
+    .badge-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--fg);
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── TL: Orb / Home ─────────────────────────────────────────────────── -->
+<a href="index.html" class="orb" id="orb" aria-label="Home">
+  <canvas id="orb-canvas"></canvas>
+</a>
+
+<!-- ── TR: Navigation ─────────────────────────────────────────────────── -->
+<nav class="nav" aria-label="Main">
+  <a href="about.html"      class="nav-link" style="color:var(--fg)">About</a>
+  <a href="archives.html"   class="nav-link">Archives</a>
+  <a href="playground.html" class="nav-link">Playground</a>
+</nav>
+
+<!-- ── BL: Social bar ────────────────────────────────────────────────── -->
+<div class="social-bar">
+  <a href="https://x.com/mattjss" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="X / Twitter">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+  </a>
+  <a href="https://www.linkedin.com/in/matt-silverman-67126a3a/" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="LinkedIn">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+  </a>
+  <a href="https://github.com/mattjss" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="GitHub">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+  </a>
+  <a href="https://www.cosmos.so/mattjs" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Cosmos">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 0C12.4183 0 16 3.58172 16 8C16 12.4183 12.4183 16 8 16C3.58172 16 0 12.4183 0 8C0 3.58172 3.58172 0 8 0ZM8 11C7.44772 11 7 11.4477 7 12C7 12.5523 7.44772 13 8 13C8.55229 13 9 12.5523 9 12C9 11.4477 8.55229 11 8 11ZM4 9C3.44772 9 3 9.44771 3 10C3 10.5523 3.44772 11 4 11C4.55228 11 5 10.5523 5 10C5 9.44771 4.55228 9 4 9ZM12 9C11.4477 9 11 9.44771 11 10C11 10.5523 11.4477 11 12 11C12.5523 11 13 10.5523 13 10C13 9.44771 12.5523 9 12 9ZM4 5C3.44772 5 3 5.44772 3 6C3 6.55228 3.44772 7 4 7C4.55228 7 5 6.55228 5 6C5 5.44772 4.55228 5 4 5ZM12 5C11.4477 5 11 5.44772 11 6C11 6.55228 11.4477 7 12 7C12.5523 7 13 6.55228 13 6C13 5.44772 12.5523 5 12 5ZM8 3C7.44772 3 7 3.44772 7 4C7 4.55228 7.44772 5 8 5C8.55229 5 9 4.55228 9 4C9 3.44772 8.55229 3 8 3Z" fill="currentColor"/></svg>
+  </a>
+</div>
+
+<!-- ── BR: Theme toggle ───────────────────────────────────────────────── -->
+<button class="theme-cta" id="themeBtn" aria-label="Toggle theme">
+  <svg class="theme-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+    <mask id="tc-mask-1" fill="white"><path d="M0 8C0 10.1217 0.842854 12.1566 2.34315 13.6569C3.84344 15.1571 5.87827 16 8 16C10.1217 16 12.1566 15.1571 13.6569 13.6569C15.1571 12.1566 16 10.1217 16 8L8 8H0Z"/></mask>
+    <path d="M0 8C0 10.1217 0.842854 12.1566 2.34315 13.6569C3.84344 15.1571 5.87827 16 8 16C10.1217 16 12.1566 15.1571 13.6569 13.6569C15.1571 12.1566 16 10.1217 16 8L8 8H0Z" fill="currentColor" stroke="currentColor" stroke-width="3.2" mask="url(#tc-mask-1)"/>
+    <mask id="tc-mask-2" fill="white"><path d="M0 8C0 6.94942 0.206926 5.90914 0.608964 4.93853C1.011 3.96793 1.60028 3.08601 2.34315 2.34315C3.08601 1.60028 3.96793 1.011 4.93853 0.608964C5.90914 0.206926 6.94943 0 8 0C9.05058 0 10.0909 0.206926 11.0615 0.608964C12.0321 1.011 12.914 1.60028 13.6569 2.34315C14.3997 3.08601 14.989 3.96793 15.391 4.93853C15.7931 5.90914 16 6.94943 16 8H14.3996C14.3996 7.1596 14.234 6.32743 13.9124 5.551C13.5908 4.77457 13.1194 4.06908 12.5252 3.47483C11.9309 2.88058 11.2254 2.40919 10.449 2.08758C9.67257 1.76597 8.8404 1.60044 8 1.60044C7.1596 1.60044 6.32743 1.76597 5.551 2.08758C4.77457 2.40919 4.06908 2.88058 3.47483 3.47483C2.88058 4.06908 2.40919 4.77457 2.08758 5.551C1.76597 6.32743 1.60044 7.1596 1.60044 8H0Z"/></mask>
+    <path d="M0 8C0 6.94942 0.206926 5.90914 0.608964 4.93853C1.011 3.96793 1.60028 3.08601 2.34315 2.34315C3.08601 1.60028 3.96793 1.011 4.93853 0.608964C5.90914 0.206926 6.94943 0 8 0C9.05058 0 10.0909 0.206926 11.0615 0.608964C12.0321 1.011 12.914 1.60028 13.6569 2.34315C14.3997 3.08601 14.989 3.96793 15.391 4.93853C15.7931 5.90914 16 6.94943 16 8H14.3996C14.3996 7.1596 14.234 6.32743 13.9124 5.551C13.5908 4.77457 13.1194 4.06908 12.5252 3.47483C11.9309 2.88058 11.2254 2.40919 10.449 2.08758C9.67257 1.76597 8.8404 1.60044 8 1.60044C7.1596 1.60044 6.32743 1.76597 5.551 2.08758C4.77457 2.40919 4.06908 2.88058 3.47483 3.47483C2.88058 4.06908 2.40919 4.77457 2.08758 5.551C1.76597 6.32743 1.60044 7.1596 1.60044 8H0Z" fill="currentColor" stroke="currentColor" stroke-width="3.2" mask="url(#tc-mask-2)"/>
+  </svg>
+</button>
+
+<!-- ── Hero: Terminal-Bio ─────────────────────────────────────────────── -->
+<section class="hero">
+  <div id="tb-wrap">
+    <div id="tb-terminal">
+      <div id="tb-body">
+        <div id="tb-output"></div>
+      </div>
+      <div id="tb-bottom">
+        <div id="tb-controls">
+          <button class="tb-paddle" id="tb-prev" aria-label="Previous">
+            <svg width="9" height="14" viewBox="0 0 9 14" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6.5,1.5 2.5,7 6.5,12.5"/></svg>
+          </button>
+          <button class="tb-paddle" id="tb-next" aria-label="Next">
+            <svg width="9" height="14" viewBox="0 0 9 14" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><polyline points="2.5,1.5 6.5,7 2.5,12.5"/></svg>
+          </button>
+        </div>
+        <div id="tb-scenes">
+          <span id="tb-scene-current">about me</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Bio content ────────────────────────────────────────────────────── -->
+<main class="about-main">
+  <div class="about-content">
+    <div class="badge-container" id="badge-container">
+      <div class="badge" id="badge">
+        <div class="badge-avatar">
+          <div data-us-project="OB3PSXZQ5lZ4RPvrTzxZ" style="width:36px;height:36px;"></div>
+        </div>
+        <div class="badge-info">
+          <span class="badge-name">Matt Silverman</span>
+          <span class="badge-sub">San Diego, California</span>
+        </div>
+        <span class="badge-dot" id="badge-dot"></span>
+      </div>
+      <!-- Left satellites -->
+      <div class="sat sat-l" style="--dx:-148px;--dy:-45px;--d:0ms">  <div class="sat-photo"></div></div>
+      <div class="sat sat-l" style="--dx:-160px;--dy:-18px;--d:50ms"><div class="sat-photo"></div></div>
+      <div class="sat sat-l" style="--dx:-160px;--dy:18px;--d:100ms"><div class="sat-photo"></div></div>
+      <div class="sat sat-l" style="--dx:-148px;--dy:45px;--d:150ms"> <div class="sat-photo"></div></div>
+      <!-- Right satellites -->
+      <div class="sat sat-r" style="--dx:148px;--dy:-45px;--d:0ms">  <div class="sat-photo"></div></div>
+      <div class="sat sat-r" style="--dx:160px;--dy:-18px;--d:50ms"><div class="sat-photo"></div></div>
+      <div class="sat sat-r" style="--dx:160px;--dy:18px;--d:100ms"><div class="sat-photo"></div></div>
+      <div class="sat sat-r" style="--dx:148px;--dy:45px;--d:150ms"> <div class="sat-photo"></div></div>
+    </div>
+    <p class="about-bio">I'm an AI-native product designer focused on strategy, craft, and code. For the past decade I've worked mostly in 0–1 spaces, helping take products from concept to launch in domains like crypto, fintech, and sports betting.<br><br>Right now I'm deep into creative coding, motion, and applied AI, experimenting with how design can make everyday interactions feel simpler and more natural.</p>
+  </div>
+</main>
+
+<script src="https://cdn.unicorn.studio/v1.4/unicornStudio.umd.js"></script>
+<script>
+  window.addEventListener('load', () => {
+    if (window.UnicornStudio) UnicornStudio.init();
+  });
+</script>
+<script src="app.js"></script>
+
+<!-- ── Orb canvas animation ────────────────────────────────────────────── -->
+<script>
+(function(){
+  const S=60,canvas=document.getElementById('orb-canvas');
+  canvas.width=S;canvas.height=S;
+  const ctx=canvas.getContext('2d'),orbEl=document.getElementById('orb');
+  const B8=[0,32,8,40,2,34,10,42,48,16,56,24,50,18,58,26,12,44,4,36,14,46,6,38,
+    60,28,52,20,62,30,54,22,3,35,11,43,1,33,9,41,51,19,59,27,49,17,57,25,
+    15,47,7,39,13,45,5,37,63,31,55,23,61,29,53,21].map(v=>v/64);
+  const BASE_R=0.86,OR=0.72,YF=0.46;
+  let hovered=false,angle=1.2,speed=0.38,gain=0.60,specPow=10,flash=0,breatheT=0,prevMs=0;
+  orbEl.addEventListener('mouseenter',()=>{hovered=true;flash=1.0;});
+  orbEl.addEventListener('mouseleave',()=>{hovered=false;});
+  function frame(ms){
+    const dt=Math.min((ms-prevMs)/1000,0.05);prevMs=ms;
+    speed  +=((hovered?2.8 :0.38)-speed)  *Math.min(1,dt*4);
+    gain   +=((hovered?0.90:0.60)-gain)   *Math.min(1,dt*5);
+    specPow+=((hovered?22  :10)  -specPow)*Math.min(1,dt*4);
+    flash=Math.max(0,flash-dt*2.5);
+    breatheT+=dt*0.55;angle+=speed*dt;
+    const R=BASE_R*(1+0.022*Math.sin(breatheT));
+    const lx=Math.cos(angle)*OR,ly=Math.sin(angle)*OR*YF;
+    const lz=Math.sqrt(Math.max(0,1-lx*lx-ly*ly));
+    const img=ctx.createImageData(S,S);const p=img.data;
+    for(let py=0;py<S;py++)for(let px=0;px<S;px++){
+      const u=(px+0.5)/S*2-1,v=-((py+0.5)/S*2-1),r2=u*u+v*v;
+      if(r2>R*R)continue;
+      const sz=Math.sqrt(R*R-r2),nx=u/R,ny=v/R,nz=sz/R;
+      const ndl=Math.max(0,nx*lx+ny*ly+nz*lz);
+      const rx=2*ndl*nx-lx,ry=2*ndl*ny-ly,rz=2*ndl*nz-lz;
+      const spec=Math.pow(Math.max(0,rz),specPow);
+      const rim=0.10*Math.pow(1-nz,2.2);
+      const lit=(0.05+ndl*0.58+spec*0.75+rim)*gain+flash*0.30;
+      if(Math.min(1,lit)>B8[(py%8)*8+(px%8)]){const i=(py*S+px)*4;p[i]=p[i+1]=p[i+2]=0;p[i+3]=255;}
+    }
+    ctx.putImageData(img,0,0);requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+
+<!-- ── Terminal-Bio script ────────────────────────────────────────────── -->
+<script>
+(() => {
+  const out = document.getElementById('tb-output');
+  let actx = null;
+  const ac = () => { if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)(); return actx; };
+
+  // Mute terminal sounds when scrolled away from hero
+  let terminalAudible = true;
+  const heroEl = document.querySelector('.hero');
+  if (heroEl && 'IntersectionObserver' in window) {
+    new IntersectionObserver(
+      ([e]) => { terminalAudible = e.intersectionRatio >= 0.5; },
+      { threshold: 0.5 }
+    ).observe(heroEl);
+  }
+
+  function mkNoise(c, dur) {
+    const n = Math.ceil(c.sampleRate * dur), buf = c.createBuffer(1, n, c.sampleRate), d = buf.getChannelData(0);
+    for (let i = 0; i < n; i++) d[i] = Math.random() * 2 - 1;
+    const src = c.createBufferSource(); src.buffer = buf; return src;
+  }
+  function keyClick() {
+    if (!terminalAudible) return;
+    try {
+      const c = ac(), t = c.currentTime, noise = mkNoise(c, 0.005), ng = c.createGain();
+      ng.gain.setValueAtTime(0.14, t); ng.gain.exponentialRampToValueAtTime(0.0001, t+0.006);
+      noise.connect(ng); ng.connect(c.destination); noise.start(); noise.stop(t+0.007);
+      const osc = c.createOscillator(), og = c.createGain();
+      osc.type = 'sine'; osc.frequency.setValueAtTime(300+Math.random()*60, t); osc.frequency.exponentialRampToValueAtTime(80, t+0.04);
+      osc.connect(og); og.connect(c.destination);
+      og.gain.setValueAtTime(0.055, t); og.gain.exponentialRampToValueAtTime(0.0001, t+0.045);
+      osc.start(); osc.stop(t+0.05);
+    } catch(_) {}
+  }
+  function enterClick() {
+    if (!terminalAudible) return;
+    try {
+      const c = ac(), t = c.currentTime, noise = mkNoise(c, 0.008), ng = c.createGain();
+      ng.gain.setValueAtTime(0.22, t); ng.gain.exponentialRampToValueAtTime(0.0001, t+0.01);
+      noise.connect(ng); ng.connect(c.destination); noise.start(); noise.stop(t+0.012);
+      const osc = c.createOscillator(), og = c.createGain();
+      osc.type = 'sine'; osc.frequency.setValueAtTime(220, t); osc.frequency.exponentialRampToValueAtTime(60, t+0.055);
+      osc.connect(og); og.connect(c.destination);
+      og.gain.setValueAtTime(0.08, t); og.gain.exponentialRampToValueAtTime(0.0001, t+0.06);
+      osc.start(); osc.stop(t+0.065);
+    } catch(_) {}
+  }
+  function blip() {
+    if (!terminalAudible) return;
+    try {
+      const c = ac(), t = c.currentTime, noise = mkNoise(c, 0.004), ng = c.createGain();
+      ng.gain.setValueAtTime(0.05, t); ng.gain.exponentialRampToValueAtTime(0.0001, t+0.005);
+      noise.connect(ng); ng.connect(c.destination); noise.start(); noise.stop(t+0.006);
+    } catch(_) {}
+  }
+
+  const wait = ms => new Promise(r => setTimeout(r, ms));
+  function waitG(ms, gen) { return new Promise((res, rej) => setTimeout(() => runGen === gen ? res() : rej(0), ms)); }
+
+  function addLine(html = '') {
+    const el = document.createElement('span'); el.className = 'line'; el.innerHTML = html;
+    out.appendChild(el); return el;
+  }
+  function mkPrompt() {
+    const el = document.createElement('span'); el.className = 'line';
+    const pr = document.createElement('span'); pr.className = 'p'; pr.textContent = 'matt › ';
+    const cmd = document.createElement('span');
+    const cur = document.createElement('span'); cur.className = 'cursor';
+    el.appendChild(pr); el.appendChild(cmd); el.appendChild(cur);
+    out.appendChild(el); return { cmd, cur };
+  }
+  async function type(cmdEl, text, gen) {
+    for (const ch of text) {
+      if (runGen !== gen) throw 0;
+      cmdEl.textContent += ch; keyClick();
+      await wait(46 + Math.random() * 62);
+    }
+  }
+  const SPIN = ['⣾','⣽','⣻','⢿','⡿','⣟','⣯','⣷'];
+  function thinkFor(messages, ms, gen) {
+    const line = addLine(''), span = document.createElement('span'); line.appendChild(span);
+    let si = 0, mi = 0, frames = 0;
+    span.innerHTML = `<span class="v">${SPIN[si]}</span>  <span class="d">${messages[mi]}</span>`;
+    return new Promise((res, rej) => {
+      const iv = setInterval(() => {
+        if (runGen !== gen) { clearInterval(iv); line.remove(); rej(0); return; }
+        si = (si+1) % SPIN.length;
+        if (++frames % 12 === 0) mi = (mi+1) % messages.length;
+        span.innerHTML = `<span class="v">${SPIN[si]}</span>  <span class="d">${messages[mi]}</span>`;
+      }, 100);
+      setTimeout(() => { clearInterval(iv); line.remove(); runGen === gen ? res() : rej(0); }, ms);
+    });
+  }
+
+  async function sceneAbout(gen) {
+    const { cmd, cur } = mkPrompt();
+    await waitG(700, gen); await type(cmd, 'about me', gen);
+    enterClick(); await waitG(140, gen); cur.remove();
+    await thinkFor(['loading profile','resolving identity'], 2200, gen);
+    addLine('<span class="mk">—</span> <span class="m">name</span>      <span class="v">Matt Silverman</span>'); blip(); await waitG(200, gen);
+    addLine('<span class="mk">—</span> <span class="m">born</span>      <span class="v">San Francisco, CA</span>'); blip(); await waitG(200, gen);
+    addLine('<span class="mk">—</span> <span class="m">raised</span>    <span class="v">San Diego, CA</span>'); blip(); await waitG(200, gen);
+    addLine('<span class="mk">—</span> <span class="m">based</span>     <span class="v">San Diego, CA</span>'); blip(); await waitG(200, gen);
+    addLine('<span class="mk">—</span> <span class="m">role</span>      <span class="v">product designer</span>  <span class="d">· 11 years</span>'); blip(); await waitG(340, gen);
+    addLine(''); addLine('<span class="d">experience</span>'); blip(); await waitG(180, gen);
+    addLine('<span class="mk">—</span> <span class="v">Qualcomm</span>'); blip(); await waitG(200, gen);
+    addLine('<span class="mk">—</span> <span class="v">The Action Network</span>'); blip(); await waitG(200, gen);
+    addLine('<span class="mk">—</span> <span class="v">Olympus Finance</span>'); blip(); await waitG(200, gen);
+    addLine('<span class="mk">—</span> <span class="v">MakersPlace</span>'); blip(); await waitG(340, gen);
+    addLine(''); addLine('<span class="d">tools</span>'); blip(); await waitG(180, gen);
+    addLine('<span class="mk">—</span> <span class="v">Figma</span>'); blip(); await waitG(200, gen);
+    addLine('<span class="mk">—</span> <span class="v">Claude Code</span>'); blip(); await waitG(200, gen);
+    addLine('<span class="mk">—</span> <span class="v">Cursor</span>'); blip(); await waitG(200, gen);
+    addLine('<span class="mk">—</span> <span class="v">Xcode</span>'); blip();
+  }
+
+  async function sceneProInterests(gen) {
+    const { cmd, cur } = mkPrompt();
+    await waitG(700, gen); await type(cmd, 'interests --pro', gen);
+    enterClick(); await waitG(140, gen); cur.remove();
+    await thinkFor(['reading file','indexing skills'], 1800, gen);
+    addLine('<span class="d">professional interests</span>'); blip(); await waitG(180, gen);
+    addLine('<span class="mk">—</span> <span class="v">human-computer interaction</span>'); blip(); await waitG(200, gen);
+    addLine('<span class="mk">—</span> <span class="v">applied AI</span>'); blip(); await waitG(200, gen);
+    addLine('<span class="mk">—</span> <span class="v">systems</span>'); blip(); await waitG(200, gen);
+    addLine('<span class="mk">—</span> <span class="v">Japanese + Swiss graphic design</span>'); blip(); await waitG(200, gen);
+    addLine('<span class="mk">—</span> <span class="v">creative coding</span>'); blip();
+  }
+
+  async function scenePersonalInterests(gen) {
+    const { cmd, cur } = mkPrompt();
+    await waitG(700, gen); await type(cmd, 'interests --personal', gen);
+    enterClick(); await waitG(140, gen); cur.remove();
+    await thinkFor(['reading file','parsing entries'], 1800, gen);
+    addLine('<span class="d">personal interests</span>'); blip(); await waitG(180, gen);
+    addLine('<span class="mk">—</span> <span class="v">family + friends</span>'); blip(); await waitG(200, gen);
+    addLine('<span class="mk">—</span> <span class="v">museums</span>  <span class="d">· fine art · architecture</span>'); blip(); await waitG(200, gen);
+    addLine('<span class="mk">—</span> <span class="v">cars</span>'); blip(); await waitG(200, gen);
+    addLine('<span class="mk">—</span> <span class="v">horology</span>  <span class="d">· Swiss watchmaking</span>'); blip(); await waitG(200, gen);
+    addLine('<span class="mk">—</span> <span class="v">U.S. history</span>'); blip(); await waitG(200, gen);
+    addLine('<span class="mk">—</span> <span class="v">backpack camping</span>  <span class="d">+ fishing</span>'); blip(); await waitG(200, gen);
+    addLine('<span class="mk">—</span> <span class="v">traveling the world</span>'); blip(); await waitG(200, gen);
+    addLine('<span class="mk">—</span> <span class="v">golf</span>  <span class="d">· 1.7 hcp</span>'); blip();
+  }
+
+  async function sceneSports(gen) {
+    const { cmd, cur } = mkPrompt();
+    await waitG(700, gen); await type(cmd, 'sports --teams', gen);
+    enterClick(); await waitG(140, gen); cur.remove();
+    await thinkFor(['loading rosters','checking standings','pulling prospects'], 2600, gen);
+    addLine('<span class="mk">—</span> <span class="v">San Francisco Giants</span>     <span class="d">MLB</span>'); blip(); await waitG(200, gen);
+    addLine('<span class="mk">—</span> <span class="v">San Francisco 49ers</span>      <span class="d">NFL</span>'); blip(); await waitG(200, gen);
+    addLine('<span class="mk">—</span> <span class="v">Golden State Warriors</span>    <span class="d">NBA</span>'); blip(); await waitG(200, gen);
+    addLine('<span class="mk">—</span> <span class="v">San Jose Sharks</span>          <span class="d">NHL</span>'); blip(); await waitG(200, gen);
+    addLine('<span class="mk">—</span> <span class="v">San Diego FC</span>             <span class="d">MLS</span>'); blip(); await waitG(200, gen);
+    addLine('<span class="mk">—</span> <span class="v">Stanford Golf + Baseball</span> <span class="d">NCAA</span>'); blip(); await waitG(200, gen);
+    addLine('<span class="mk">—</span> <span class="v">Florida Basketball + Football</span>  <span class="d">NCAA</span>'); blip();
+  }
+
+  async function sceneHealth(gen) {
+    const { cmd, cur } = mkPrompt();
+    await waitG(700, gen); await type(cmd, 'health --habits', gen);
+    enterClick(); await waitG(140, gen); cur.remove();
+    await thinkFor(['reading habits','checking routine'], 1800, gen);
+    addLine('<span class="d">fitness</span>'); blip(); await waitG(180, gen);
+    addLine('<span class="mk">—</span> <span class="v">gym</span>  <span class="d">· lifting + strength</span>'); blip(); await waitG(200, gen);
+    addLine('<span class="mk">—</span> <span class="v">running</span>'); blip(); await waitG(200, gen);
+    addLine('<span class="mk">—</span> <span class="v">yoga</span>'); blip(); await waitG(200, gen);
+    addLine('<span class="mk">—</span> <span class="v">whole foods</span>  <span class="d">· no seed oils · water</span>'); blip(); await waitG(340, gen);
+    addLine(''); addLine('<span class="d">cheat meals</span>'); blip(); await waitG(180, gen);
+    addLine('<span class="mk">—</span> <span class="v">cheeseburgers</span>'); blip(); await waitG(200, gen);
+    addLine('<span class="mk">—</span> <span class="v">california burritos</span>'); blip(); await waitG(200, gen);
+    addLine('<span class="mk">—</span> <span class="v">sushi</span>'); blip(); await waitG(200, gen);
+    addLine('<span class="mk">—</span> <span class="v">Mexican Coca-Cola</span>'); blip();
+  }
+
+  const SCENE_FNS = [sceneAbout, sceneProInterests, scenePersonalInterests, sceneSports, sceneHealth];
+  const SCENE_NAMES = ['about me', 'interests', 'personal', 'sports', 'health'];
+  let sceneIdx = 0, runGen = 0;
+
+  const sceneCurrentEl = document.getElementById('tb-scene-current');
+  function updateSceneLbl() {
+    sceneCurrentEl.textContent = SCENE_NAMES[sceneIdx];
+  }
+
+  function switchScene(idx) {
+    sceneIdx = ((idx % SCENE_FNS.length) + SCENE_FNS.length) % SCENE_FNS.length;
+    updateSceneLbl();
+    runGen++; out.innerHTML = '';
+    setTimeout(() => run(), 400);
+  }
+
+  async function run() {
+    const gen = ++runGen; out.innerHTML = '';
+    updateSceneLbl();
+    try {
+      await waitG(700, gen);
+      await SCENE_FNS[sceneIdx](gen);
+      await waitG(500, gen); mkPrompt();
+      await waitG(3200, gen);
+      sceneIdx = (sceneIdx + 1) % SCENE_FNS.length;
+      run();
+    } catch(_) {}
+  }
+
+  document.getElementById('tb-prev').addEventListener('click', () => switchScene(sceneIdx - 1));
+  document.getElementById('tb-next').addEventListener('click', () => switchScene(sceneIdx + 1));
+  document.addEventListener('click', () => ac(), { once: true });
+  run();
+})();
+</script>
+
+<!-- ── Badge tilt animation (mirrors alexvictorabraham.com) ──────────── -->
+<script>
+(() => {
+  const container = document.getElementById('badge-container');
+  const badge     = document.getElementById('badge');
+  if (!container || !badge) return;
+
+  let rx = 0, ry = 0, scale = 1;
+
+  function apply() {
+    badge.style.transform = `perspective(1000px) rotateX(${rx}deg) rotateY(${ry}deg) scale(${scale})`;
+  }
+
+  badge.addEventListener('mousemove', e => {
+    const r  = badge.getBoundingClientRect();
+    const cx = r.left + r.width  / 2;
+    const cy = r.top  + r.height / 2;
+    ry =  (e.clientX - cx) / (r.width  / 2) * 12;
+    rx =  (cy - e.clientY) / (r.height / 2) * 12;
+    apply();
+  });
+
+  badge.addEventListener('mouseleave', () => {
+    rx = 0; ry = 0; scale = 1; apply();
+  });
+
+  badge.addEventListener('mousedown', () => {
+    scale = 0.95; apply();
+  });
+
+  badge.addEventListener('mouseup', () => {
+    scale = 1; apply();
+  });
+
+  badge.addEventListener('mouseenter', () => { if (typeof play === 'function') play('hover'); });
+
+  container.addEventListener('click', e => {
+    if (e.target.closest('.sat')) return;
+    container.classList.toggle('expanded');
+    if (typeof play === 'function') play('tap');
+  });
+
+  // Touch support
+  container.addEventListener('touchmove', e => {
+    const r  = badge.getBoundingClientRect();
+    const cx = r.left + r.width  / 2;
+    const cy = r.top  + r.height / 2;
+    ry =  (e.touches[0].clientX - cx) / (r.width  / 2) * 12;
+    rx =  (cy - e.touches[0].clientY) / (r.height / 2) * 12;
+    apply();
+  }, { passive: true });
+
+  container.addEventListener('touchend', () => {
+    rx = 0; ry = 0; scale = 1; apply();
+  });
+})();
+</script>
+
+</body>
+</html>

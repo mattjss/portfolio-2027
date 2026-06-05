@@ -24,17 +24,7 @@
 
 <!-- ── TL: Orb / Home ─────────────────────────────────────────────────── -->
 <a href="#" class="orb" id="orb" aria-label="Home">
-  <svg class="orb-svg" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <defs>
-      <pattern id="dots" x="0" y="0" width="6" height="6" patternUnits="userSpaceOnUse">
-        <circle cx="3" cy="3" r="1.8" fill="currentColor"/>
-      </pattern>
-      <mask id="circle-mask">
-        <circle cx="30" cy="30" r="27" fill="white"/>
-      </mask>
-    </defs>
-    <rect width="60" height="60" fill="url(#dots)" mask="url(#circle-mask)"/>
-  </svg>
+  <canvas id="orb-canvas"></canvas>
 </a>
 
 <!-- ── TR: Navigation ─────────────────────────────────────────────────── -->
@@ -51,7 +41,7 @@
       <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
     </svg>
   </a>
-  <a href="https://linkedin.com/in/mattsilverman" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="LinkedIn">
+  <a href="https://www.linkedin.com/in/matt-silverman-67126a3a/" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="LinkedIn">
     <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
     </svg>
@@ -61,15 +51,26 @@
       <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
     </svg>
   </a>
-  <a href="https://warpcast.com/mattsilverman" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Farcaster">
-    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <path d="M11.707 0h.586C18.36 0 24 5.373 24 12v.293c0 6.327-5.373 11.707-12 11.707h-.293C5.373 24 0 18.627 0 12.293V12C0 5.373 5.373 0 12 0zm-.371 5.5H7.5l3.5 5-3.5 8h2.5l2.5-5.5 2.5 5.5H17l-3.5-8 3.5-5h-3.836L12 8.5z"/>
+  <a href="https://www.cosmos.so/mattjs" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Cosmos">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M8 0C12.4183 0 16 3.58172 16 8C16 12.4183 12.4183 16 8 16C3.58172 16 0 12.4183 0 8C0 3.58172 3.58172 0 8 0ZM8 11C7.44772 11 7 11.4477 7 12C7 12.5523 7.44772 13 8 13C8.55229 13 9 12.5523 9 12C9 11.4477 8.55229 11 8 11ZM4 9C3.44772 9 3 9.44771 3 10C3 10.5523 3.44772 11 4 11C4.55228 11 5 10.5523 5 10C5 9.44771 4.55228 9 4 9ZM12 9C11.4477 9 11 9.44771 11 10C11 10.5523 11.4477 11 12 11C12.5523 11 13 10.5523 13 10C13 9.44771 12.5523 9 12 9ZM4 5C3.44772 5 3 5.44772 3 6C3 6.55228 3.44772 7 4 7C4.55228 7 5 6.55228 5 6C5 5.44772 4.55228 5 4 5ZM12 5C11.4477 5 11 5.44772 11 6C11 6.55228 11.4477 7 12 7C12.5523 7 13 6.55228 13 6C13 5.44772 12.5523 5 12 5ZM8 3C7.44772 3 7 3.44772 7 4C7 4.55228 7.44772 5 8 5C8.55229 5 9 4.55228 9 4C9 3.44772 8.55229 3 8 3Z" fill="currentColor"/>
     </svg>
   </a>
 </div>
 
 <!-- ── BR: Theme toggle ───────────────────────────────────────────────── -->
-<button class="theme-cta" id="themeBtn" aria-label="Toggle theme"></button>
+<button class="theme-cta" id="themeBtn" aria-label="Toggle theme">
+  <svg class="theme-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <mask id="tc-mask-1" fill="white">
+      <path d="M0 8C0 10.1217 0.842854 12.1566 2.34315 13.6569C3.84344 15.1571 5.87827 16 8 16C10.1217 16 12.1566 15.1571 13.6569 13.6569C15.1571 12.1566 16 10.1217 16 8L8 8H0Z"/>
+    </mask>
+    <path d="M0 8C0 10.1217 0.842854 12.1566 2.34315 13.6569C3.84344 15.1571 5.87827 16 8 16C10.1217 16 12.1566 15.1571 13.6569 13.6569C15.1571 12.1566 16 10.1217 16 8L8 8H0Z" fill="currentColor" stroke="currentColor" stroke-width="3.2" mask="url(#tc-mask-1)"/>
+    <mask id="tc-mask-2" fill="white">
+      <path d="M0 8C0 6.94942 0.206926 5.90914 0.608964 4.93853C1.011 3.96793 1.60028 3.08601 2.34315 2.34315C3.08601 1.60028 3.96793 1.011 4.93853 0.608964C5.90914 0.206926 6.94943 0 8 0C9.05058 0 10.0909 0.206926 11.0615 0.608964C12.0321 1.011 12.914 1.60028 13.6569 2.34315C14.3997 3.08601 14.989 3.96793 15.391 4.93853C15.7931 5.90914 16 6.94943 16 8H14.3996C14.3996 7.1596 14.234 6.32743 13.9124 5.551C13.5908 4.77457 13.1194 4.06908 12.5252 3.47483C11.9309 2.88058 11.2254 2.40919 10.449 2.08758C9.67257 1.76597 8.8404 1.60044 8 1.60044C7.1596 1.60044 6.32743 1.76597 5.551 2.08758C4.77457 2.40919 4.06908 2.88058 3.47483 3.47483C2.88058 4.06908 2.40919 4.77457 2.08758 5.551C1.76597 6.32743 1.60044 7.1596 1.60044 8H0Z"/>
+    </mask>
+    <path d="M0 8C0 6.94942 0.206926 5.90914 0.608964 4.93853C1.011 3.96793 1.60028 3.08601 2.34315 2.34315C3.08601 1.60028 3.96793 1.011 4.93853 0.608964C5.90914 0.206926 6.94943 0 8 0C9.05058 0 10.0909 0.206926 11.0615 0.608964C12.0321 1.011 12.914 1.60028 13.6569 2.34315C14.3997 3.08601 14.989 3.96793 15.391 4.93853C15.7931 5.90914 16 6.94943 16 8H14.3996C14.3996 7.1596 14.234 6.32743 13.9124 5.551C13.5908 4.77457 13.1194 4.06908 12.5252 3.47483C11.9309 2.88058 11.2254 2.40919 10.449 2.08758C9.67257 1.76597 8.8404 1.60044 8 1.60044C7.1596 1.60044 6.32743 1.76597 5.551 2.08758C4.77457 2.40919 4.06908 2.88058 3.47483 3.47483C2.88058 4.06908 2.40919 4.77457 2.08758 5.551C1.76597 6.32743 1.60044 7.1596 1.60044 8H0Z" fill="currentColor" stroke="currentColor" stroke-width="3.2" mask="url(#tc-mask-2)"/>
+  </svg>
+</button>
 
 <!-- ── Hero ──────────────────────────────────────────────────────────── -->
 <section class="hero">
@@ -88,53 +89,37 @@
 
     <div class="card">
       <div class="card-inner">
-        <!-- image: images/design-system.jpg -->
-      </div>
-      <div class="card-meta">
-        <div class="card-meta-row">
-          <span class="card-name">MAKERSPLACE — DESIGN SYSTEM</span>
-          <a href="#" class="card-link">VIEW →</a>
-        </div>
-        <span class="card-year">2023</span>
+        <video loop muted playsinline src="images/design-system.mp4"></video>
+        <button class="mute-btn" aria-label="Toggle mute">
+          <svg class="icon-muted" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3.5 3.5 6H1v4h2.5L7 12.5V3.5Z"/><line x1="10" y1="6" x2="14" y2="10"/><line x1="14" y1="6" x2="10" y2="10"/></svg>
+          <svg class="icon-unmuted" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M7 3.5 3.5 6H1v4h2.5L7 12.5V3.5Z"/><path d="M10.5 5.5c1 1 1 4 0 5"/><path d="M12.5 3.5c1.5 1.5 1.5 7.5 0 9"/></svg>
+        </button>
       </div>
     </div>
 
     <div class="card">
       <div class="card-inner">
-        <!-- image: images/pdp.jpg -->
-      </div>
-      <div class="card-meta">
-        <div class="card-meta-row">
-          <span class="card-name">MAKERSPLACE — PDP</span>
-          <a href="#" class="card-link">VIEW →</a>
-        </div>
-        <span class="card-year">2023</span>
+        <img src="images/pdp.png" alt="MakersPlace PDP">
       </div>
     </div>
 
     <div class="card">
       <div class="card-inner">
-        <!-- image: images/exhibition.jpg -->
-      </div>
-      <div class="card-meta">
-        <div class="card-meta-row">
-          <span class="card-name">MAKERSPLACE — EXHIBITION PAGE</span>
-          <a href="#" class="card-link">VIEW →</a>
-        </div>
-        <span class="card-year">2022</span>
+        <video loop muted playsinline src="images/exhibition.mp4"></video>
+        <button class="mute-btn" aria-label="Toggle mute">
+          <svg class="icon-muted" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3.5 3.5 6H1v4h2.5L7 12.5V3.5Z"/><line x1="10" y1="6" x2="14" y2="10"/><line x1="14" y1="6" x2="10" y2="10"/></svg>
+          <svg class="icon-unmuted" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M7 3.5 3.5 6H1v4h2.5L7 12.5V3.5Z"/><path d="M10.5 5.5c1 1 1 4 0 5"/><path d="M12.5 3.5c1.5 1.5 1.5 7.5 0 9"/></svg>
+        </button>
       </div>
     </div>
 
     <div class="card">
       <div class="card-inner">
-        <!-- image: images/profile.jpg -->
-      </div>
-      <div class="card-meta">
-        <div class="card-meta-row">
-          <span class="card-name">MAKERSPLACE — PROFILE PAGE</span>
-          <a href="#" class="card-link">VIEW →</a>
-        </div>
-        <span class="card-year">2022</span>
+        <video loop muted playsinline src="images/profile.mp4"></video>
+        <button class="mute-btn" aria-label="Toggle mute">
+          <svg class="icon-muted" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3.5 3.5 6H1v4h2.5L7 12.5V3.5Z"/><line x1="10" y1="6" x2="14" y2="10"/><line x1="14" y1="6" x2="10" y2="10"/></svg>
+          <svg class="icon-unmuted" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M7 3.5 3.5 6H1v4h2.5L7 12.5V3.5Z"/><path d="M10.5 5.5c1 1 1 4 0 5"/><path d="M12.5 3.5c1.5 1.5 1.5 7.5 0 9"/></svg>
+        </button>
       </div>
     </div>
 
@@ -142,6 +127,99 @@
 </main>
 
 <script src="app.js"></script>
+<script>
+(function () {
+  const S = 60;
+  const canvas = document.getElementById('orb-canvas');
+  canvas.width = S; canvas.height = S;
+  const ctx = canvas.getContext('2d');
+  const orbEl = document.getElementById('orb');
+
+  // 8×8 ordered Bayer — converts smooth grayscale → 1-bit halftone
+  const B8 = [
+     0,32, 8,40, 2,34,10,42,
+    48,16,56,24,50,18,58,26,
+    12,44, 4,36,14,46, 6,38,
+    60,28,52,20,62,30,54,22,
+     3,35,11,43, 1,33, 9,41,
+    51,19,59,27,49,17,57,25,
+    15,47, 7,39,13,45, 5,37,
+    63,31,55,23,61,29,53,21
+  ].map(v => v / 64);
+
+  // Sphere + light constants
+  const BASE_R = 0.86;          // sphere radius in −1..1 space
+  const OR = 0.72, YF = 0.46;  // orbit radius; y-flatten for 3-D depth illusion
+
+  let hovered  = false;
+  let angle    = 1.2;   // current light angle
+  let speed    = 0.38;  // rad/s
+  let gain     = 0.60;  // brightness multiplier
+  let specPow  = 10;    // Phong specular exponent
+  let flash    = 0;     // one-shot entry flash
+  let breatheT = 0;
+  let prevMs   = 0;
+
+  orbEl.addEventListener('mouseenter', () => { hovered = true;  flash = 1.0; });
+  orbEl.addEventListener('mouseleave', () => { hovered = false; });
+
+  function frame(ms) {
+    const dt = Math.min((ms - prevMs) / 1000, 0.05);
+    prevMs = ms;
+
+    speed   += ((hovered ? 2.8  : 0.38) - speed)   * Math.min(1, dt * 4);
+    gain    += ((hovered ? 0.90 : 0.60) - gain)     * Math.min(1, dt * 5);
+    specPow += ((hovered ? 22   : 10)   - specPow)  * Math.min(1, dt * 4);
+    flash    = Math.max(0, flash - dt * 2.5);
+    breatheT += dt * 0.55;
+    angle   += speed * dt;
+
+    // Sphere radius breathes ±2.2% at rest (alive but subtle)
+    const R  = BASE_R * (1 + 0.022 * Math.sin(breatheT));
+
+    // Light direction: elliptical orbit, z always positive (front hemisphere)
+    const lx = Math.cos(angle) * OR;
+    const ly = Math.sin(angle) * OR * YF;
+    const lz = Math.sqrt(Math.max(0, 1 - lx*lx - ly*ly));
+
+    const img = ctx.createImageData(S, S);
+    const p   = img.data;
+
+    for (let py = 0; py < S; py++) {
+      for (let px = 0; px < S; px++) {
+        const u  = (px + 0.5) / S * 2 - 1;
+        const v  = -((py + 0.5) / S * 2 - 1);
+        const r2 = u*u + v*v;
+        if (r2 > R*R) continue;
+
+        // Unit surface normal
+        const sz = Math.sqrt(R*R - r2);
+        const nx = u/R, ny = v/R, nz = sz/R;
+
+        // Phong: diffuse + specular (eye at +z)
+        const ndl  = Math.max(0, nx*lx + ny*ly + nz*lz);
+        const rx   = 2*ndl*nx - lx, ry = 2*ndl*ny - ly, rz = 2*ndl*nz - lz;
+        const spec = Math.pow(Math.max(0, rz), specPow);
+
+        // Fresnel rim: edge pixels slightly brighter, outlines the sphere
+        const rim  = 0.10 * Math.pow(1 - nz, 2.2);
+
+        const lit = (0.05 + ndl*0.58 + spec*0.75 + rim) * gain + flash * 0.30;
+
+        if (Math.min(1, lit) > B8[(py % 8) * 8 + (px % 8)]) {
+          const i = (py * S + px) * 4;
+          p[i] = p[i+1] = p[i+2] = 0; p[i+3] = 255;
+        }
+      }
+    }
+
+    ctx.putImageData(img, 0, 0);
+    requestAnimationFrame(frame);
+  }
+
+  requestAnimationFrame(frame);
+})();
+</script>
 
 <!-- ── Terminal Intro (github.com/mattjss/terminal-intro) ─────────────── -->
 <script>
