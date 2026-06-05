@@ -4,21 +4,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Matt Silverman</title>
-  <meta name="description" content="AI-native product designer with focus on strategy, craft, and code. Based in San Diego, California.">
+  <meta name="description" content="Product designer based in San Diego, CA. Focused on motion, LLMs, and creative code.">
   <meta property="og:title" content="Matt Silverman">
-  <meta property="og:description" content="AI-native product designer with focus on strategy, craft, and code.">
+  <meta property="og:description" content="Product designer based in San Diego, CA.">
   <meta property="og:type" content="website">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=JetBrains+Mono:wght@100..800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100..800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <script>
     (function(){
-      var t=localStorage.getItem('theme')||'system';
-      var r=t==='system'?(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'):t;
-      document.documentElement.setAttribute('data-theme',r);
+      var t = localStorage.getItem('theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', t);
       document.documentElement.classList.add('no-transition');
-      window.addEventListener('load',function(){setTimeout(function(){document.documentElement.classList.remove('no-transition');},50);});
+      window.addEventListener('load', function(){ setTimeout(function(){ document.documentElement.classList.remove('no-transition'); }, 50); });
     })();
   </script>
 </head>
@@ -26,173 +25,415 @@
 
 <!-- ── Header ──────────────────────────────────────────────────────────── -->
 <header class="header">
-  <a href="index.html" class="logo" aria-label="Home">
-    <svg class="logo-svg" width="32" height="32" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <defs>
-        <pattern id="dp" x="0" y="0" width="6" height="6" patternUnits="userSpaceOnUse">
-          <circle cx="3" cy="3" r="1.8" fill="currentColor"/>
-        </pattern>
-        <mask id="dm">
-          <circle cx="30" cy="30" r="27" fill="white"/>
-        </mask>
-      </defs>
-      <rect width="60" height="60" fill="url(#dp)" mask="url(#dm)"/>
-    </svg>
-  </a>
+  <div class="header-left">
+    <a href="#" class="header-name">MATT SILVERMAN</a>
+    <span class="header-title">PRODUCT DESIGNER</span>
+  </div>
 
-  <nav class="nav">
-    <a href="about.html" class="nav-link">About</a>
-    <a href="archives.html" class="nav-link">Archives</a>
-    <a href="playground.html" class="nav-link">Playground</a>
-  </nav>
+  <div class="header-center">
+    <span class="header-location">SAN DIEGO, CA</span>
+    <span class="header-time" id="headerTime"></span>
+  </div>
 
-  <div class="menu-wrapper">
-    <button class="menu-toggle" aria-label="Open menu">
-      <svg class="menu-toggle-icon" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
-        <line x1="8" y1="3" x2="8" y2="13"/>
-        <line x1="3" y1="8" x2="13" y2="8"/>
+  <div class="header-right">
+    <nav class="nav">
+      <a href="#work" class="nav-link" data-sound="hover">WORK</a>
+      <span class="nav-dot">·</span>
+      <a href="#playground" class="nav-link" data-sound="hover">PLAYGROUND</a>
+      <span class="nav-dot">·</span>
+      <a href="about.html" class="nav-link" data-sound="hover">ABOUT</a>
+    </nav>
+    <button class="theme-toggle" aria-label="Toggle theme" id="themeBtn">
+      <svg class="theme-icon" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm0 1.5a5.5 5.5 0 0 1 0 11V2.5z"/>
       </svg>
     </button>
-    <div class="dropdown">
-      <a href="about.html" class="dropdown-link" style="--index:0">About</a>
-      <a href="archives.html" class="dropdown-link" style="--index:1">Archives</a>
-      <a href="playground.html" class="dropdown-link" style="--index:2">Playground</a>
+  </div>
+
+  <!-- Mobile right: hamburger only -->
+  <div class="header-mobile-right">
+    <button class="menu-toggle" aria-label="Open menu" id="menuToggle">≡</button>
+    <div class="dropdown" id="dropdown">
+      <a href="#work" class="dropdown-link" style="--index:0">WORK</a>
+      <a href="#playground" class="dropdown-link" style="--index:1">PLAYGROUND</a>
+      <a href="about.html" class="dropdown-link" style="--index:2">ABOUT</a>
     </div>
   </div>
 </header>
 
-<!-- ── Social sidebar ──────────────────────────────────────────────────── -->
-<div class="social-bar">
-  <a href="https://x.com/mattjss" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="X">
-    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-    </svg>
-  </a>
-  <a href="https://linkedin.com/in/mattsilverman" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="LinkedIn">
-    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-    </svg>
-  </a>
-  <a href="https://github.com/mattjss" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="GitHub">
-    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
-    </svg>
-  </a>
-  <a href="https://warpcast.com/mattsilverman" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Farcaster">
-    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <path d="M11.707 0h.586C18.36 0 24 5.373 24 12v.293c0 6.327-5.373 11.707-12 11.707h-.293C5.373 24 0 18.627 0 12.293V12C0 5.373 5.373 0 12 0zm-.371 5.5H7.5l3.5 5-3.5 8h2.5l2.5-5.5 2.5 5.5H17l-3.5-8 3.5-5h-3.836L12 8.5z"/>
-    </svg>
-  </a>
-</div>
-
-<!-- ── Main ─────────────────────────────────────────────────────────────── -->
-<main>
-  <!-- Hero -->
-  <section class="hero">
-    <p class="hero-text"><span>Matt Silverman</span></p>
-    <p class="hero-text">Based in San Diego, California.</p>
-    <p class="hero-text">AI-native product designer with focus on strategy, craft, and code.</p>
-  </section>
-
-  <!-- Work grid -->
-  <section>
-    <div class="work-grid">
-      <a href="https://makersplace.com" target="_blank" rel="noopener noreferrer" class="work-item">
-        <div class="work-meta">
-          <span class="work-year">2021</span>
-          <span class="work-name">MakersPlace</span>
-        </div>
-        <div class="work-thumbnail">
-          <img src="images/card1.jpg" alt="MakersPlace exhibition">
-        </div>
-      </a>
-
-      <a href="https://makersplace.com" target="_blank" rel="noopener noreferrer" class="work-item">
-        <div class="work-meta">
-          <span class="work-year">2021</span>
-          <span class="work-name">MakersPlace</span>
-        </div>
-        <div class="work-thumbnail">
-          <img src="images/card2.jpg" alt="MakersPlace marketplace">
-        </div>
-      </a>
-
-      <a href="https://makersplace.com" target="_blank" rel="noopener noreferrer" class="work-item">
-        <div class="work-meta">
-          <span class="work-year">2021</span>
-          <span class="work-name">MakersPlace</span>
-        </div>
-        <div class="work-thumbnail">
-          <img src="images/card3.jpg" alt="MakersPlace discovery">
-        </div>
-      </a>
-
-      <a href="https://makersplace.com" target="_blank" rel="noopener noreferrer" class="work-item">
-        <div class="work-meta">
-          <span class="work-year">2021</span>
-          <span class="work-name">MakersPlace</span>
-        </div>
-        <div class="work-thumbnail">
-          <img src="images/card4.jpg" alt="MakersPlace artists">
-        </div>
-      </a>
+<!-- ── Hero ─────────────────────────────────────────────────────────────── -->
+<section class="hero">
+  <div class="hero-inner">
+    <!-- Terminal intro container: fixed 422×96px so page never jumps -->
+    <div class="terminal-wrap">
+      <div id="intro">
+        <div class="ln ln-name"     id="l1"></div>
+        <div class="ln ln-location" id="l2"></div>
+        <div class="ln ln-tagline"  id="l3"></div>
+      </div>
     </div>
-  </section>
-</main>
 
-<!-- ── Contact ───────────────────────────────────────────────────────────── -->
-<section class="contact">
-  <p class="connect-text">Let's connect — Especially if you're into HCI, AI, or Bitcoin DeFi.</p>
-  <div class="contact-links">
-    <a href="mailto:silverman.me@gmail.com" target="_blank" rel="noopener noreferrer" class="contact-link" aria-label="Email">
-      <span class="contact-icon">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
-        </svg>
-      </span>
-    </a>
-    <a href="https://x.com/mattjss" target="_blank" rel="noopener noreferrer" class="contact-link" aria-label="X">
-      <span class="contact-icon">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-        </svg>
-      </span>
-    </a>
-    <a href="https://linkedin.com/in/mattsilverman" target="_blank" rel="noopener noreferrer" class="contact-link" aria-label="LinkedIn">
-      <span class="contact-icon">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-        </svg>
-      </span>
-    </a>
-    <a href="https://github.com/mattjss" target="_blank" rel="noopener noreferrer" class="contact-link" aria-label="GitHub">
-      <span class="contact-icon">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
-        </svg>
-      </span>
-    </a>
-  </div>
-  <div class="footer-meta">
-    <span>Designed in San Diego, CA</span>
-    <span>v2027.2</span>
+    <!-- Status lines -->
+    <div class="hero-meta">
+      <span class="hero-meta-line">DAY: LOADING</span>
+      <span class="hero-meta-line">NIGHT: EXPLORING MOTION, LLMS, + CURSOR AI</span>
+      <span class="hero-meta-line">PREV: MAKERSPLACE, OLYMPUS, ODYSSEY, ACTION</span>
+    </div>
+
+    <!-- Thumbnails -->
+    <div class="hero-thumbs">
+      <img src="images/card1.jpg" alt="Work 1" class="hero-thumb">
+      <img src="images/card2.jpg" alt="Work 2" class="hero-thumb">
+      <img src="images/card3.jpg" alt="Work 3" class="hero-thumb">
+      <img src="images/card4.jpg" alt="Work 4" class="hero-thumb">
+    </div>
+
+    <p class="hero-scroll">SCROLL TO EXPLORE</p>
   </div>
 </section>
 
-<!-- ── Theme toggle ──────────────────────────────────────────────────────── -->
-<button class="theme-toggle" aria-label="Toggle theme">
-  <span class="theme-toggle-icon">
-    <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm0 1.5a5.5 5.5 0 0 1 0 11V2.5z"/>
-    </svg>
-  </span>
-</button>
+<!-- ── Work ─────────────────────────────────────────────────────────────── -->
+<section id="work" class="section">
+  <span class="section-label">WORK</span>
+  <div class="work-grid">
 
-<!-- ── Live time ─────────────────────────────────────────────────────────── -->
-<div class="live-time" aria-hidden="true">
-  <span class="live-time-text"></span>
-</div>
+    <!-- Card 1 — light bg -->
+    <div class="work-card card-light">
+      <div class="work-card-inner">
+        <div class="crop-mark crop-tl"></div>
+        <div class="crop-mark crop-tr"></div>
+        <div class="crop-mark crop-bl"></div>
+        <div class="crop-mark crop-br"></div>
+        <img src="images/card1.jpg" alt="MakersPlace Exhibition" class="work-card-img">
+      </div>
+      <div class="work-card-meta">
+        <div class="work-card-row">
+          <span class="work-card-name">MAKERSPLACE — EXHIBITION PAGE</span>
+          <a href="#" class="work-card-link">CASE STUDY →</a>
+        </div>
+        <div class="work-card-row">
+          <span class="work-card-year">2023</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2 — dark bg -->
+    <div class="work-card card-dark">
+      <div class="work-card-inner">
+        <div class="crop-mark crop-tl"></div>
+        <div class="crop-mark crop-tr"></div>
+        <div class="crop-mark crop-bl"></div>
+        <div class="crop-mark crop-br"></div>
+        <img src="images/card2.jpg" alt="MakersPlace Marketplace" class="work-card-img">
+      </div>
+      <div class="work-card-meta">
+        <div class="work-card-row">
+          <span class="work-card-name">MAKERSPLACE — MARKETPLACE</span>
+          <a href="#" class="work-card-link">CASE STUDY →</a>
+        </div>
+        <div class="work-card-row">
+          <span class="work-card-year">2023</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 3 — dark bg -->
+    <div class="work-card card-dark">
+      <div class="work-card-inner">
+        <div class="crop-mark crop-tl"></div>
+        <div class="crop-mark crop-tr"></div>
+        <div class="crop-mark crop-bl"></div>
+        <div class="crop-mark crop-br"></div>
+        <img src="images/card3.jpg" alt="MakersPlace Discovery" class="work-card-img">
+      </div>
+      <div class="work-card-meta">
+        <div class="work-card-row">
+          <span class="work-card-name">MAKERSPLACE — DISCOVERY</span>
+          <a href="#" class="work-card-link">CASE STUDY →</a>
+        </div>
+        <div class="work-card-row">
+          <span class="work-card-year">2022</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 4 — light bg -->
+    <div class="work-card card-light">
+      <div class="work-card-inner">
+        <div class="crop-mark crop-tl"></div>
+        <div class="crop-mark crop-tr"></div>
+        <div class="crop-mark crop-bl"></div>
+        <div class="crop-mark crop-br"></div>
+        <img src="images/card4.jpg" alt="MakersPlace Artists" class="work-card-img">
+      </div>
+      <div class="work-card-meta">
+        <div class="work-card-row">
+          <span class="work-card-name">MAKERSPLACE — ARTIST TOOLS</span>
+          <a href="#" class="work-card-link">CASE STUDY →</a>
+        </div>
+        <div class="work-card-row">
+          <span class="work-card-year">2022</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── Playground ────────────────────────────────────────────────────────── -->
+<section id="playground" class="section">
+  <span class="section-label">PLAYGROUND</span>
+  <p class="section-subtitle">Ongoing creative explorations and projects</p>
+  <div class="pg-grid">
+
+    <a href="https://mattjss.github.io/Agentic-Animations-2/" target="_blank" rel="noopener" class="pg-card" data-sound="hover">
+      <span class="pg-card-name">AGENTIC PIXEL LOADERS</span>
+      <span class="pg-card-tags">React · Tailwind · motion</span>
+      <span class="pg-card-link">[PREVIEW] →</span>
+    </a>
+
+    <a href="https://mattjss.github.io/cloth/" target="_blank" rel="noopener" class="pg-card" data-sound="hover">
+      <span class="pg-card-name">FABRIC</span>
+      <span class="pg-card-tags">canvas · spring physics</span>
+      <span class="pg-card-link">[PREVIEW] →</span>
+    </a>
+
+    <a href="https://mattjss.github.io/flock/" target="_blank" rel="noopener" class="pg-card" data-sound="hover">
+      <span class="pg-card-name">FLOCK</span>
+      <span class="pg-card-tags">canvas · boids · game</span>
+      <span class="pg-card-link">[PREVIEW] →</span>
+    </a>
+
+    <a href="https://mattjss.github.io/Logo-Carousel/" target="_blank" rel="noopener" class="pg-card" data-sound="hover">
+      <span class="pg-card-name">LOGO CAROUSEL</span>
+      <span class="pg-card-tags">React · CSS · marquee</span>
+      <span class="pg-card-link">[PREVIEW] →</span>
+    </a>
+
+    <a href="https://mattjss.github.io/Matrix-Loader/" target="_blank" rel="noopener" class="pg-card" data-sound="hover">
+      <span class="pg-card-name">MATRIX LOADER</span>
+      <span class="pg-card-tags">React · monospace · agentic UI</span>
+      <span class="pg-card-link">[PREVIEW] →</span>
+    </a>
+
+    <a href="https://mattjss.github.io/satoshi/" target="_blank" rel="noopener" class="pg-card" data-sound="hover">
+      <span class="pg-card-name">SATOSHI</span>
+      <span class="pg-card-tags">canvas · live data · bitcoin</span>
+      <span class="pg-card-link">[PREVIEW] →</span>
+    </a>
+
+    <a href="https://mattjss.github.io/Save-Button/" target="_blank" rel="noopener" class="pg-card" data-sound="hover">
+      <span class="pg-card-name">SAVE BUTTON</span>
+      <span class="pg-card-tags">React · Tailwind · micro-interaction</span>
+      <span class="pg-card-link">[PREVIEW] →</span>
+    </a>
+
+    <a href="https://mattjss.github.io/Spider-Mesh/" target="_blank" rel="noopener" class="pg-card" data-sound="hover">
+      <span class="pg-card-name">SPIDER MESH</span>
+      <span class="pg-card-tags">canvas · spider mesh · ripple</span>
+      <span class="pg-card-link">[PREVIEW] →</span>
+    </a>
+
+    <a href="https://mattjss.github.io/Sync/" target="_blank" rel="noopener" class="pg-card" data-sound="hover">
+      <span class="pg-card-name">SYNC</span>
+      <span class="pg-card-tags">React · AI UI · calendar</span>
+      <span class="pg-card-link">[PREVIEW] →</span>
+    </a>
+
+    <a href="https://mattjss.github.io/terminal/" target="_blank" rel="noopener" class="pg-card" data-sound="hover">
+      <span class="pg-card-name">TERMINAL</span>
+      <span class="pg-card-tags">canvas · monospace · agentic UI</span>
+      <span class="pg-card-link">[PREVIEW] →</span>
+    </a>
+
+    <a href="https://mattjss.github.io/terminal-bio/" target="_blank" rel="noopener" class="pg-card" data-sound="hover">
+      <span class="pg-card-name">TERMINAL BIO</span>
+      <span class="pg-card-tags">canvas · monospace · bio</span>
+      <span class="pg-card-link">[PREVIEW] →</span>
+    </a>
+
+    <a href="https://mattjss.github.io/terminal-intro/" target="_blank" rel="noopener" class="pg-card" data-sound="hover">
+      <span class="pg-card-name">TERMINAL INTRO</span>
+      <span class="pg-card-tags">monospace · animation · intro</span>
+      <span class="pg-card-link">[PREVIEW] →</span>
+    </a>
+
+    <a href="https://mattjss.github.io/Vector/" target="_blank" rel="noopener" class="pg-card" data-sound="hover">
+      <span class="pg-card-name">VECTOR</span>
+      <span class="pg-card-tags">DOM · CSS · angular spring</span>
+      <span class="pg-card-link">[PREVIEW] →</span>
+    </a>
+
+  </div>
+</section>
+
+<!-- ── About ─────────────────────────────────────────────────────────────── -->
+<section id="about" class="section section-about">
+  <span class="section-label">ABOUT</span>
+
+  <div class="about-layout">
+    <div class="about-main">
+      <h2 class="about-heading">Curious by nature, crafted in practice</h2>
+      <p class="about-bio">I specialize in simplifying complex problems through software design. My experience spans multiple 0-1 startups and projects, most recently as Senior Product Designer at MakersPlace where I built experiences for digital art creators and collectors in the Web3 space. My design philosophy centers on continuous learning and curiosity about the 'Why' behind every interaction, and how technology can create more meaningful experiences. I am currently focused on exploring creative coding, LLM's + AI tools, motion design and prototyping. I'm also particularly curious about Bitcoin L2 solutions like the Stacks blockchain.</p>
+    </div>
+
+    <div class="about-sidebar">
+      <div class="about-block">
+        <span class="about-block-label">/TECH STACK</span>
+        <p class="about-block-sub">Some tools I use, and some tools I'm learning</p>
+        <dl class="stack-list">
+          <dt>AI AGENTS</dt><dd>PERPLEXITY, CLAUDE, CHATGPT</dd>
+          <dt>DEV AGENTS</dt><dd>V0, LOVABLE, CURSOR</dd>
+          <dt>UI + PROTOTYPING</dt><dd>FIGMA, PLAY</dd>
+          <dt>ANIMATION + MOTION</dt><dd>RIVE, GSAP</dd>
+          <dt>3D + INTERACTIVE</dt><dd>BLENDER, SPLINE, UNICORN, WEBGL, THREE.JS</dd>
+          <dt>PRODUCTIVITY</dt><dd>ARC, NOTION</dd>
+        </dl>
+      </div>
+
+      <div class="about-block">
+        <span class="about-block-label">/CONTACT</span>
+        <p class="about-block-sub">Let's connect, especially if you're into HCI, motion design, or Bitcoin DeFi</p>
+        <ul class="contact-list">
+          <li><a href="mailto:silverman.me@gmail.com" class="contact-item">[EMAIL] →</a></li>
+          <li><a href="https://x.com/mattjss" target="_blank" rel="noopener" class="contact-item">[TWITTER/X] →</a></li>
+          <li><a href="https://linkedin.com/in/mattsilverman" target="_blank" rel="noopener" class="contact-item">[LINKEDIN] →</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Footer ────────────────────────────────────────────────────────────── -->
+<footer class="footer">
+  <span class="footer-left">DESIGNED AND BUILT IN SAN DIEGO, CA</span>
+  <span class="footer-right">v2027.2</span>
+</footer>
 
 <script src="app.js"></script>
+
+<!-- ── Terminal Intro inline script ──────────────────────────────────────── -->
+<script>
+(function(){
+  var l1 = document.getElementById('l1');
+  var l2 = document.getElementById('l2');
+  var l3 = document.getElementById('l3');
+  if (!l1) return;
+
+  var LINES = [
+    { el: l1, text: 'Matt Silverman' },
+    { el: l2, text: 'Based in San Diego, California' },
+    { el: l3, text: 'AI-native product designer with focus on\nstrategy, craft, and code.' },
+  ];
+
+  var cursor = document.createElement('span');
+  cursor.className = 'ti-cursor';
+
+  var actx = null;
+  function ac() {
+    if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
+    return actx;
+  }
+
+  function mkNoise(c, dur) {
+    var n = Math.ceil(c.sampleRate * dur);
+    var buf = c.createBuffer(1, n, c.sampleRate);
+    var d = buf.getChannelData(0);
+    for (var i = 0; i < n; i++) d[i] = Math.random() * 2 - 1;
+    var src = c.createBufferSource(); src.buffer = buf; return src;
+  }
+
+  function keyClick() {
+    try {
+      var c = ac(), t = c.currentTime;
+      var noise = mkNoise(c, 0.005);
+      var ng = c.createGain();
+      ng.gain.setValueAtTime(0.14, t); ng.gain.exponentialRampToValueAtTime(0.0001, t + 0.006);
+      noise.connect(ng); ng.connect(c.destination);
+      noise.start(); noise.stop(t + 0.007);
+      var osc = c.createOscillator(), og = c.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(300 + Math.random() * 60, t);
+      osc.frequency.exponentialRampToValueAtTime(80, t + 0.04);
+      osc.connect(og); og.connect(c.destination);
+      og.gain.setValueAtTime(0.055, t); og.gain.exponentialRampToValueAtTime(0.0001, t + 0.045);
+      osc.start(); osc.stop(t + 0.05);
+    } catch(_) {}
+  }
+
+  function enterClick() {
+    try {
+      var c = ac(), t = c.currentTime;
+      var noise = mkNoise(c, 0.008);
+      var ng = c.createGain();
+      ng.gain.setValueAtTime(0.22, t); ng.gain.exponentialRampToValueAtTime(0.0001, t + 0.01);
+      noise.connect(ng); ng.connect(c.destination);
+      noise.start(); noise.stop(t + 0.012);
+      var osc = c.createOscillator(), og = c.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(220, t);
+      osc.frequency.exponentialRampToValueAtTime(60, t + 0.055);
+      osc.connect(og); og.connect(c.destination);
+      og.gain.setValueAtTime(0.08, t); og.gain.exponentialRampToValueAtTime(0.0001, t + 0.06);
+      osc.start(); osc.stop(t + 0.065);
+    } catch(_) {}
+  }
+
+  function successChime() {
+    try {
+      var c = ac();
+      [[880, 0, 0.12, 0.15], [1108, 0.18, 0.10, 0.18]].forEach(function(item) {
+        var hz = item[0], delay = item[1], vol = item[2], decay = item[3];
+        var osc = c.createOscillator(), g = c.createGain();
+        osc.type = 'sine'; osc.frequency.value = hz;
+        osc.connect(g); g.connect(c.destination);
+        var t = c.currentTime + delay;
+        g.gain.setValueAtTime(vol, t);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + decay);
+        osc.start(t); osc.stop(t + decay + 0.01);
+      });
+    } catch(_) {}
+  }
+
+  function sleep(ms) { return new Promise(function(r){ setTimeout(r, ms); }); }
+
+  async function typeLine(el, text) {
+    var textNode = document.createTextNode('');
+    el.appendChild(textNode);
+    el.appendChild(cursor);
+    for (var i = 0; i < text.length; i++) {
+      var ch = text[i];
+      if (ch === '\n') {
+        el.insertBefore(document.createElement('br'), cursor);
+        textNode = document.createTextNode('');
+        el.insertBefore(textNode, cursor);
+      } else {
+        textNode.textContent += ch;
+        keyClick();
+      }
+      await sleep(36 + Math.random() * 30);
+    }
+  }
+
+  async function runTerminal() {
+    await sleep(420);
+    for (var i = 0; i < LINES.length; i++) {
+      await typeLine(LINES[i].el, LINES[i].text);
+      if (i < LINES.length - 1) {
+        enterClick();
+        await sleep(220);
+      }
+    }
+    successChime();
+  }
+
+  ['click', 'keydown', 'touchstart'].forEach(function(e) {
+    document.addEventListener(e, function(){ ac(); }, { once: true, passive: true });
+  });
+
+  runTerminal();
+})();
+</script>
+
 </body>
 </html>
