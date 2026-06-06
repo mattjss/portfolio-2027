@@ -95,7 +95,7 @@
 
     <div class="card">
       <div class="card-inner">
-        <img src="images/pdp.png" alt="MakersPlace PDP">
+        <video loop muted playsinline src="images/pdp.mp4"></video>
       </div>
     </div>
 
@@ -234,7 +234,17 @@
     const src = c.createBufferSource(); src.buffer = buf; return src;
   }
 
+  let terminalAudible = true;
+  const heroEl = document.querySelector('.hero');
+  if (heroEl && 'IntersectionObserver' in window) {
+    new IntersectionObserver(
+      ([e]) => { terminalAudible = e.intersectionRatio >= 0.5; },
+      { threshold: 0.5 }
+    ).observe(heroEl);
+  }
+
   function keyClick() {
+    if (!terminalAudible) return;
     try {
       const c = ac(), t = c.currentTime;
       const noise = mkNoise(c, 0.005);
@@ -253,6 +263,7 @@
   }
 
   function enterClick() {
+    if (!terminalAudible) return;
     try {
       const c = ac(), t = c.currentTime;
       const noise = mkNoise(c, 0.008);

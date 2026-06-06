@@ -173,10 +173,23 @@ main { padding: 0 64px 32px; }
   left: 7.6%; top: 25.4%;
   width: 84.8%; height: 48.9%;
   object-fit: cover; display: block;
-  transition: transform .5s ease;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  transition: transform .5s ease, box-shadow .5s ease;
+}
+[data-theme=dark] .card-inner img,
+[data-theme=dark] .card-inner video {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.45);
 }
 .card:hover .card-inner img,
-.card:hover .card-inner video { transform: scale(1.05); }
+.card:hover .card-inner video {
+  transform: scale(1.05);
+  box-shadow: 0 10px 32px rgba(0,0,0,0.14);
+}
+[data-theme=dark] .card:hover .card-inner img,
+[data-theme=dark] .card:hover .card-inner video {
+  box-shadow: 0 10px 32px rgba(0,0,0,0.65);
+}
+.card:active .card-inner { transform: scale(.98); }
 
 /* Mute button */
 .mute-btn {
