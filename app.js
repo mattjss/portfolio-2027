@@ -79,10 +79,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     card.addEventListener('mouseenter', () => {
-      play('hover');
+      if (muteBtn) play('hover');
       if (video) video.play().catch(() => {});
       if (muteBtn) showMute();
     });
+
+    card.addEventListener('pointerdown', () => { if (muteBtn) play('tap'); });
 
     card.addEventListener('mouseleave', () => {
       if (video) { video.pause(); video.currentTime = 0; }
