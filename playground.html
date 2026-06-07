@@ -85,7 +85,7 @@
 <main>
   <div class="pg-grid">
     <!-- Row 1: Flock / Spider Mesh / Agentic Pixel Loaders -->
-    <div class="pg-card">
+    <div class="pg-card" data-sound="click">
       <div class="pg-card-inner">
         <div class="pg-embed">
           <iframe id="flock-iframe" src="https://mattjss.github.io/flock/?embed=1" scrolling="no" tabindex="-1" allow="autoplay"></iframe>
@@ -101,7 +101,7 @@
         </div>
       </div>
     </div>
-    <div class="pg-card">
+    <div class="pg-card" data-sound="click">
       <div class="pg-card-inner">
         <div class="pg-embed">
           <iframe src="https://mattjss.github.io/Spider-Mesh/?embed=1" scrolling="no" tabindex="-1" allow="autoplay"></iframe>
@@ -162,7 +162,7 @@
         </div>
       </div>
     </div>
-    <div class="pg-card">
+    <div class="pg-card" data-sound="terminal">
       <div class="pg-card-inner">
         <div class="pg-embed">
           <iframe id="terminal-iframe" src="https://mattjss.github.io/terminal/?embed=1" scrolling="no" tabindex="-1" allow="autoplay"></iframe>
@@ -194,7 +194,7 @@
         </div>
       </div>
     </div>
-    <div class="pg-card">
+    <div class="pg-card" data-sound="hover-vector">
       <div class="pg-card-inner">
         <div class="pg-embed">
           <iframe src="https://mattjss.github.io/Vector/?embed=1" scrolling="no" tabindex="-1" allow="autoplay"></iframe>
@@ -226,7 +226,7 @@
         </div>
       </div>
     </div>
-    <div class="pg-card">
+    <div class="pg-card" data-sound="hover-cloth">
       <div class="pg-card-inner">
         <div class="pg-embed">
           <iframe src="https://mattjss.github.io/cloth/?embed=1" scrolling="no" tabindex="-1" allow="autoplay"></iframe>
@@ -274,20 +274,54 @@
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 window.addEventListener('load', () => window.scrollTo(0, 0));
 
-// ── Sound control via postMessage ─────────────────────────────────────────
-// iframes start muted (?embed=1). On hover, this page unmutes the active card
-// and mutes all others. The per-card muted flag persists (user preference).
+// ── Portfolio-level audio ─────────────────────────────────────────────────
+// Audio is played directly from the portfolio page.
+// iframes remain permanently silent (?embed=1) — no postMessage for sound.
 
-function iframeMsg(iframe, muted) {
-  try { if (iframe) iframe.contentWindow.postMessage({ type: 'setMuted', muted }, '*'); } catch(e) {}
+let _actx = null;
+function getCtx() {
+  if (!_actx) _actx = new (window.AudioContext || window.webkitAudioContext)();
+  if (_actx.state === 'suspended') _actx.resume();
+  return _actx;
+}
+function playKeyClick() {
+  try {
+    const ctx = getCtx(), osc = ctx.createOscillator(), g = ctx.createGain();
+    osc.connect(g); g.connect(ctx.destination);
+    osc.frequency.value = 400 + Math.random() * 200;
+    osc.type = 'square';
+    g.gain.setValueAtTime(0.04, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.04);
+    osc.start(); osc.stop(ctx.currentTime + 0.05);
+  } catch(_) {}
+}
+
+const _sel  = new Audio('sounds/selection.mp3');   _sel.volume  = 0.42;
+const _hCloth  = new Audio('sounds/hover-cloth.wav'); _hCloth.volume  = 0.35;
+const _hVector = new Audio('sounds/hover-vector.wav'); _hVector.volume = 0.35;
+
+let _hoverX = -9999, _hoverY = -9999, _hoverMs = 0;
+
+function tryHover(x, y, type) {
+  const dx = x - _hoverX, dy = y - _hoverY;
+  const now = performance.now();
+  if (dx*dx + dy*dy < 48*48 || now - _hoverMs < 220) return;
+  _hoverX = x; _hoverY = y; _hoverMs = now;
+  if (type === 'hover-cloth')  { _hCloth.currentTime  = 0; _hCloth.play().catch(()=>{}); }
+  if (type === 'hover-vector') { _hVector.currentTime = 0; _hVector.play().catch(()=>{}); }
+  if (type === 'terminal')     { playKeyClick(); }
+}
+
+function stopHoverSounds() {
+  [_hCloth, _hVector].forEach(a => { a.pause(); a.currentTime = 0; });
+  _hoverX = -9999; _hoverY = -9999; _hoverMs = 0;
 }
 
 document.querySelectorAll('.pg-card').forEach(card => {
-  const soundBtn = card.querySelector('.pg-sound-btn');
-  const iframe   = card.querySelector('iframe');
-  const video    = card.querySelector('video');
-  let muted   = false; // sound on by default — user can mute per card
-  let hovered = false;
+  const soundBtn  = card.querySelector('.pg-sound-btn');
+  const video     = card.querySelector('video');
+  const soundType = card.dataset.sound;
+  let muted = false;
 
   function updateIcon() {
     if (!soundBtn) return;
@@ -296,24 +330,24 @@ document.querySelectorAll('.pg-card').forEach(card => {
   }
   updateIcon();
 
+  card.addEventListener('mousemove', e => {
+    if (muted || !soundType) return;
+    tryHover(e.clientX, e.clientY, soundType);
+  });
+
   card.addEventListener('mouseenter', () => {
-    hovered = true;
-    // Silence every other card
-    document.querySelectorAll('.pg-card').forEach(other => {
-      if (other === card) return;
-      iframeMsg(other.querySelector('iframe'), true);
-      const v = other.querySelector('video');
-      if (v) { v.muted = true; v.pause(); }
-    });
-    // Activate this card with its current mute preference
-    iframeMsg(iframe, muted);
-    if (video) { video.muted = muted; video.play().catch(() => {}); }
+    stopHoverSounds();
+    if (video) { video.muted = muted; video.play().catch(()=>{}); }
   });
 
   card.addEventListener('mouseleave', () => {
-    hovered = false;
-    iframeMsg(iframe, true);
+    stopHoverSounds();
     if (video) { video.muted = true; video.pause(); video.currentTime = 0; }
+  });
+
+  card.addEventListener('click', e => {
+    if (muted || !soundType) return;
+    _sel.currentTime = 0; _sel.play().catch(()=>{});
   });
 
   if (soundBtn) {
@@ -321,9 +355,7 @@ document.querySelectorAll('.pg-card').forEach(card => {
       e.stopPropagation();
       muted = !muted;
       updateIcon();
-      // Only send to iframe if user is currently hovering this card
-      if (hovered) iframeMsg(iframe, muted);
-      if (video && hovered) video.muted = muted;
+      if (muted) stopHoverSounds();
     });
   }
 });
