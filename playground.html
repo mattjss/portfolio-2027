@@ -291,56 +291,26 @@
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 window.addEventListener('load', () => window.scrollTo(0, 0));
 
-// ── Portfolio-level audio ─────────────────────────────────────────────────
-// Audio is played directly from the portfolio page.
-// iframes remain permanently silent (?embed=1) — no postMessage for sound.
+// ── Sound control via postMessage ─────────────────────────────────────────
+// Each iframe starts muted (?embed=1 → audioMuted=true at source).
+// On hover: send setMuted:false to let the iframe play its own sounds.
+// On leave: send setMuted:true. One card active at a time.
+// NOTE: works fully on GitHub Pages (same-origin). Localhost = cross-origin,
+//       audio may be restricted by the browser.
 
-let _actx = null;
-function getCtx() {
-  if (!_actx) _actx = new (window.AudioContext || window.webkitAudioContext)();
-  if (_actx.state === 'suspended') _actx.resume();
-  return _actx;
-}
-function playKeyClick() {
-  try {
-    const ctx = getCtx(), osc = ctx.createOscillator(), g = ctx.createGain();
-    osc.connect(g); g.connect(ctx.destination);
-    osc.frequency.value = 400 + Math.random() * 200;
-    osc.type = 'square';
-    g.gain.setValueAtTime(0.04, ctx.currentTime);
-    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.04);
-    osc.start(); osc.stop(ctx.currentTime + 0.05);
-  } catch(_) {}
-}
-
-const _sel  = new Audio('sounds/selection.mp3');   _sel.volume  = 0.42;
-const _hCloth  = new Audio('sounds/hover-cloth.wav'); _hCloth.volume  = 0.35;
-const _hVector = new Audio('sounds/hover-vector.wav'); _hVector.volume = 0.35;
-
-let _hoverX = -9999, _hoverY = -9999, _hoverMs = 0;
-
-function tryHover(x, y, type) {
-  const dx = x - _hoverX, dy = y - _hoverY;
-  const now = performance.now();
-  if (dx*dx + dy*dy < 48*48 || now - _hoverMs < 220) return;
-  _hoverX = x; _hoverY = y; _hoverMs = now;
-  if (type === 'hover-cloth')  { _hCloth.currentTime  = 0; _hCloth.play().catch(()=>{}); }
-  if (type === 'hover-vector') { _hVector.currentTime = 0; _hVector.play().catch(()=>{}); }
-  if (type === 'terminal')     { playKeyClick(); }
-}
-
-function stopHoverSounds() {
-  [_hCloth, _hVector].forEach(a => { a.pause(); a.currentTime = 0; });
-  _hoverX = -9999; _hoverY = -9999; _hoverMs = 0;
+function iframeMsg(iframe, muted) {
+  try { if (iframe) iframe.contentWindow.postMessage({ type: 'setMuted', muted }, '*'); } catch(e) {}
 }
 
 document.querySelectorAll('.pg-card').forEach(card => {
   const soundBtn  = card.querySelector('.pg-sound-btn');
+  const iframe    = card.querySelector('iframe');
   const video     = card.querySelector('video');
   const soundType = card.dataset.sound;
-  let muted = false;
+  let muted   = false; // sound plays on hover by default
+  let hovered = false;
 
-  // Hide sound button on cards with no audio
+  // No data-sound → hide sound button (card has no audio)
   if (!soundType && soundBtn) soundBtn.style.display = 'none';
 
   function updateIcon() {
@@ -350,25 +320,24 @@ document.querySelectorAll('.pg-card').forEach(card => {
   }
   updateIcon();
 
-  card.addEventListener('mousemove', e => {
-    if (muted || !soundType) return;
-    tryHover(e.clientX, e.clientY, soundType);
-  });
-
   card.addEventListener('mouseenter', () => {
-    stopHoverSounds();
-    // Only unmute video if this card has sound type; visual-only cards stay muted
-    if (video) { video.muted = soundType ? muted : true; video.play().catch(()=>{}); }
+    hovered = true;
+    // Silence every other card first
+    document.querySelectorAll('.pg-card').forEach(other => {
+      if (other === card) return;
+      iframeMsg(other.querySelector('iframe'), true);
+      const v = other.querySelector('video');
+      if (v) { v.muted = true; v.pause(); }
+    });
+    // Activate this card
+    iframeMsg(iframe, muted);
+    if (video) { video.muted = true; video.play().catch(()=>{}); }
   });
 
   card.addEventListener('mouseleave', () => {
-    stopHoverSounds();
+    hovered = false;
+    iframeMsg(iframe, true);
     if (video) { video.muted = true; video.pause(); video.currentTime = 0; }
-  });
-
-  card.addEventListener('click', e => {
-    if (muted || !soundType) return;
-    _sel.currentTime = 0; _sel.play().catch(()=>{});
   });
 
   if (soundBtn) {
@@ -376,7 +345,7 @@ document.querySelectorAll('.pg-card').forEach(card => {
       e.stopPropagation();
       muted = !muted;
       updateIcon();
-      if (muted) stopHoverSounds();
+      if (hovered) iframeMsg(iframe, muted);
     });
   }
 });
