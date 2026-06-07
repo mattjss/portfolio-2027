@@ -12,6 +12,25 @@
   <style>
     /* Icon colors — no drop shadow, consistent gray over any iframe background */
     .pg-ctrl-btn { color: #6a6a6a !important; filter: none !important; }
+
+    /* Hero terminal */
+    .hero-terminal { width: 560px; max-width: calc(100vw - 128px); }
+    @media (max-width: 768px) { .hero-terminal { max-width: calc(100vw - 64px); } }
+    .hero-terminal-inner {
+      position: relative;
+      aspect-ratio: 4 / 3;
+      background: transparent;
+      border: 1px solid #eaeaea;
+      overflow: hidden;
+      transition: border-color .35s;
+    }
+    [data-theme=dark] .hero-terminal-inner { border-color: #1e1e1e; }
+    .hero-terminal-inner iframe {
+      position: absolute; left: 0; top: 0; width: 100%; height: 100%;
+      border: none; display: block;
+    }
+    .hero-terminal .pg-card-controls { opacity: 0; transition: opacity .15s; }
+    .hero-terminal:hover .pg-card-controls { opacity: 1; }
   </style>
   <script>
     (function(){
@@ -76,9 +95,22 @@
   </svg>
 </button>
 
-<!-- ── Hero: Orb shader (featured playground piece) ──────────────────── -->
+<!-- ── Hero: Terminal (featured playground piece) ────────────────────── -->
 <section class="hero">
-  <canvas class="pg-orb-canvas" id="pg-orb" width="60" height="60"></canvas>
+  <div class="hero-terminal pg-card" data-sound="terminal">
+    <div class="hero-terminal-inner">
+      <iframe id="terminal-iframe" src="https://mattjss.github.io/terminal/?embed=1" scrolling="no" tabindex="-1" allow="autoplay"></iframe>
+      <div class="pg-card-controls">
+        <button class="pg-ctrl-btn pg-sound-btn" aria-label="Toggle sound">
+          <svg class="icon-sound-on" viewBox="0 0 16 16"><path d="M7 2L3.5 6H1v4h2.5L7 14V2z" fill="currentColor"/><path d="M10 5.5a4 4 0 0 1 0 5M12.5 3a7 7 0 0 1 0 10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" fill="none"/></svg>
+          <svg class="icon-sound-off" viewBox="0 0 16 16" style="display:none"><path d="M7 2L3.5 6H1v4h2.5L7 14V2z" fill="currentColor"/><path d="M11 6l4 4M15 6l-4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" fill="none"/></svg>
+        </button>
+        <a class="pg-ctrl-btn" href="https://mattjss.github.io/terminal/" target="_blank" rel="noopener noreferrer" aria-label="Open Terminal">
+          <svg viewBox="0 0 16 16"><path d="M9 2h5v5M14 2L7 9M4 3H2v11h11v-2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
 </section>
 
 <!-- ── Playground Cards ──────────────────────────────────────────────── -->
@@ -157,22 +189,6 @@
             <svg class="icon-sound-off" viewBox="0 0 16 16" style="display:none"><path d="M7 2L3.5 6H1v4h2.5L7 14V2z" fill="currentColor"/><path d="M11 6l4 4M15 6l-4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" fill="none"/></svg>
           </button>
           <a class="pg-ctrl-btn" href="https://mattjss.github.io/satoshi/" target="_blank" rel="noopener noreferrer" aria-label="Open Satoshi">
-            <svg viewBox="0 0 16 16"><path d="M9 2h5v5M14 2L7 9M4 3H2v11h11v-2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
-          </a>
-        </div>
-      </div>
-    </div>
-    <div class="pg-card" data-sound="terminal">
-      <div class="pg-card-inner">
-        <div class="pg-embed">
-          <iframe id="terminal-iframe" src="https://mattjss.github.io/terminal/?embed=1" scrolling="no" tabindex="-1" allow="autoplay"></iframe>
-        </div>
-        <div class="pg-card-controls">
-          <button class="pg-ctrl-btn pg-sound-btn" aria-label="Toggle sound">
-            <svg class="icon-sound-on" viewBox="0 0 16 16"><path d="M7 2L3.5 6H1v4h2.5L7 14V2z" fill="currentColor"/><path d="M10 5.5a4 4 0 0 1 0 5M12.5 3a7 7 0 0 1 0 10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" fill="none"/></svg>
-            <svg class="icon-sound-off" viewBox="0 0 16 16" style="display:none"><path d="M7 2L3.5 6H1v4h2.5L7 14V2z" fill="currentColor"/><path d="M11 6l4 4M15 6l-4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" fill="none"/></svg>
-          </button>
-          <a class="pg-ctrl-btn" href="https://mattjss.github.io/terminal/" target="_blank" rel="noopener noreferrer" aria-label="Open Terminal">
             <svg viewBox="0 0 16 16"><path d="M9 2h5v5M14 2L7 9M4 3H2v11h11v-2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
           </a>
         </div>
@@ -417,62 +433,6 @@ document.querySelectorAll('.pg-card').forEach(card => {
 })();
 </script>
 
-<!-- ── Hero orb shader (60×60 canvas → 420×420 CSS, pixelated) ───────── -->
-<script>
-(function () {
-  const S = 60;
-  const canvas = document.getElementById('pg-orb');
-  const ctx = canvas.getContext('2d');
-
-  const B8 = [
-     0,32, 8,40, 2,34,10,42,
-    48,16,56,24,50,18,58,26,
-    12,44, 4,36,14,46, 6,38,
-    60,28,52,20,62,30,54,22,
-     3,35,11,43, 1,33, 9,41,
-    51,19,59,27,49,17,57,25,
-    15,47, 7,39,13,45, 5,37,
-    63,31,55,23,61,29,53,21
-  ].map(v => v / 64);
-
-  const BASE_R = 0.86;
-  const OR = 0.72, YF = 0.46;
-  let hovered = false, angle = 2.4, speed = 0.22, gain = 0.60, specPow = 10, flash = 0, breatheT = 0, prevMs = 0;
-
-  canvas.addEventListener('mouseenter', () => { hovered = true;  flash = 0.8; });
-  canvas.addEventListener('mouseleave', () => { hovered = false; });
-
-  function frame(ms) {
-    const dt = Math.min((ms - prevMs) / 1000, 0.05); prevMs = ms;
-    speed   += ((hovered ? 2.2  : 0.22) - speed)   * Math.min(1, dt * 3);
-    gain    += ((hovered ? 0.88 : 0.60) - gain)     * Math.min(1, dt * 4);
-    specPow += ((hovered ? 20   : 10)   - specPow)  * Math.min(1, dt * 3);
-    flash    = Math.max(0, flash - dt * 2.0);
-    breatheT += dt * 0.4; angle += speed * dt;
-    const R = BASE_R * (1 + 0.028 * Math.sin(breatheT));
-    const lx = Math.cos(angle) * OR, ly = Math.sin(angle) * OR * YF;
-    const lz = Math.sqrt(Math.max(0, 1 - lx*lx - ly*ly));
-    const img = ctx.createImageData(S, S); const p = img.data;
-    for (let py = 0; py < S; py++) {
-      for (let px = 0; px < S; px++) {
-        const u = (px+.5)/S*2-1, v = -((py+.5)/S*2-1), r2 = u*u+v*v;
-        if (r2 > R*R) continue;
-        const sz = Math.sqrt(R*R-r2), nx = u/R, ny = v/R, nz = sz/R;
-        const ndl = Math.max(0, nx*lx+ny*ly+nz*lz);
-        const rx = 2*ndl*nx-lx, ry = 2*ndl*ny-ly, rz = 2*ndl*nz-lz;
-        const spec = Math.pow(Math.max(0, rz), specPow);
-        const rim = 0.10 * Math.pow(1-nz, 2.2);
-        const lit = (0.05+ndl*0.58+spec*0.75+rim)*gain+flash*0.25;
-        if (Math.min(1,lit) > B8[(py%8)*8+(px%8)]) {
-          const i = (py*S+px)*4; p[i]=p[i+1]=p[i+2]=0; p[i+3]=255;
-        }
-      }
-    }
-    ctx.putImageData(img, 0, 0); requestAnimationFrame(frame);
-  }
-  requestAnimationFrame(frame);
-})();
-</script>
 
 </body>
 </html>
