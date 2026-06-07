@@ -12,23 +12,6 @@
   <style>
     /* Icon colors — no drop shadow, consistent gray over any iframe background */
     .pg-ctrl-btn { color: #6a6a6a !important; filter: none !important; }
-
-    /* Card name label — appears bottom-left on hover */
-    .pg-card-label {
-      position: absolute;
-      bottom: 10px; left: 10px;
-      z-index: 10;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px; font-weight: 400;
-      letter-spacing: 0.04em;
-      color: #888;
-      opacity: 0;
-      transition: opacity .15s;
-      pointer-events: none;
-      text-transform: lowercase;
-    }
-    .pg-card:hover .pg-card-label { opacity: 1; }
-    [data-theme=dark] .pg-card-label { color: #777; }
   </style>
   <script>
     (function(){
@@ -350,20 +333,6 @@ document.querySelectorAll('.pg-card').forEach(card => {
   }
 });
 
-
-// Add project name labels from open-button aria-labels
-document.querySelectorAll('.pg-card').forEach(card => {
-  const inner   = card.querySelector('.pg-card-inner');
-  const openBtn = card.querySelector('a.pg-ctrl-btn[aria-label^="Open"]');
-  if (!inner || !openBtn) return;
-  const name = openBtn.getAttribute('aria-label')
-    .replace('Open ', '')
-    .replace(' (original)', '');
-  const label = document.createElement('span');
-  label.className = 'pg-card-label';
-  label.textContent = name;
-  inner.appendChild(label);
-});
 
 // Broadcast theme to iframes that implement it
 (function () {
