@@ -275,25 +275,19 @@ if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 window.addEventListener('load', () => window.scrollTo(0, 0));
 
 // ── Sound control via postMessage ─────────────────────────────────────────
-// Each iframe starts muted (?embed=1 sets audioMuted=true at the source).
-// Portfolio sends setMuted:false only to the active hovered+unmuted card.
-// This means sound is always the project's own synced audio, not synthetic.
+// iframes start muted (?embed=1). On hover, this page unmutes the active card
+// and mutes all others. The per-card muted flag persists (user preference).
 
 function iframeMsg(iframe, muted) {
   try { if (iframe) iframe.contentWindow.postMessage({ type: 'setMuted', muted }, '*'); } catch(e) {}
-}
-
-function muteAllIframes() {
-  document.querySelectorAll('iframe').forEach(f => {
-    try { f.contentWindow.postMessage({ type: 'setMuted', muted: true }, '*'); } catch(e) {}
-  });
 }
 
 document.querySelectorAll('.pg-card').forEach(card => {
   const soundBtn = card.querySelector('.pg-sound-btn');
   const iframe   = card.querySelector('iframe');
   const video    = card.querySelector('video');
-  let muted = true;
+  let muted   = false; // sound on by default — user can mute per card
+  let hovered = false;
 
   function updateIcon() {
     if (!soundBtn) return;
@@ -303,14 +297,23 @@ document.querySelectorAll('.pg-card').forEach(card => {
   updateIcon();
 
   card.addEventListener('mouseenter', () => {
-    muteAllIframes();
-    if (video) { video.muted = true; video.play().catch(() => {}); }
+    hovered = true;
+    // Silence every other card
+    document.querySelectorAll('.pg-card').forEach(other => {
+      if (other === card) return;
+      iframeMsg(other.querySelector('iframe'), true);
+      const v = other.querySelector('video');
+      if (v) { v.muted = true; v.pause(); }
+    });
+    // Activate this card with its current mute preference
     iframeMsg(iframe, muted);
+    if (video) { video.muted = muted; video.play().catch(() => {}); }
   });
 
   card.addEventListener('mouseleave', () => {
-    if (video) { video.pause(); video.currentTime = 0; }
+    hovered = false;
     iframeMsg(iframe, true);
+    if (video) { video.muted = true; video.pause(); video.currentTime = 0; }
   });
 
   if (soundBtn) {
@@ -318,8 +321,9 @@ document.querySelectorAll('.pg-card').forEach(card => {
       e.stopPropagation();
       muted = !muted;
       updateIcon();
-      iframeMsg(iframe, muted);
-      if (video) video.muted = muted;
+      // Only send to iframe if user is currently hovering this card
+      if (hovered) iframeMsg(iframe, muted);
+      if (video && hovered) video.muted = muted;
     });
   }
 });
