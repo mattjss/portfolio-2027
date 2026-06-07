@@ -16,7 +16,7 @@ html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
   --hover:    #0a0a0a;
 }
 [data-theme=dark] {
-  --bg:       #080808;
+  --bg:       #101010;
   --fg:       #fafafa;
   --fg-50:    rgba(250,250,250,0.5);
   --fg-30:    rgba(250,250,250,0.3);
