@@ -88,7 +88,7 @@
     <div class="pg-card">
       <div class="pg-card-inner">
         <div class="pg-embed">
-          <iframe id="flock-iframe" src="https://mattjss.github.io/flock/" scrolling="no" tabindex="-1" allow="autoplay"></iframe>
+          <iframe id="flock-iframe" src="https://mattjss.github.io/flock/?embed=1" scrolling="no" tabindex="-1"></iframe>
         </div>
         <div class="pg-card-controls">
           <button class="pg-ctrl-btn pg-sound-btn" aria-label="Toggle sound">
@@ -104,7 +104,7 @@
     <div class="pg-card">
       <div class="pg-card-inner">
         <div class="pg-embed">
-          <iframe src="https://mattjss.github.io/Spider-Mesh/" scrolling="no" tabindex="-1"></iframe>
+          <iframe src="https://mattjss.github.io/Spider-Mesh/?embed=1" scrolling="no" tabindex="-1"></iframe>
         </div>
         <div class="pg-card-controls">
           <button class="pg-ctrl-btn pg-sound-btn" aria-label="Toggle sound">
@@ -133,7 +133,7 @@
     <div class="pg-card">
       <div class="pg-card-inner">
         <div class="pg-embed">
-          <iframe src="https://mattjss.github.io/Sync/" scrolling="no" tabindex="-1" style="height:150%;position:absolute;top:-25%;left:0;width:100%;"></iframe>
+          <iframe src="https://mattjss.github.io/Sync/?embed=1" scrolling="no" tabindex="-1" style="height:150%;position:absolute;top:-25%;left:0;width:100%;"></iframe>
         </div>
         <div class="pg-card-controls">
           <button class="pg-ctrl-btn pg-sound-btn" aria-label="Toggle sound">
@@ -197,7 +197,7 @@
     <div class="pg-card">
       <div class="pg-card-inner">
         <div class="pg-embed">
-          <iframe src="https://mattjss.github.io/Vector/" scrolling="no" tabindex="-1"></iframe>
+          <iframe src="https://mattjss.github.io/Vector/?embed=1" scrolling="no" tabindex="-1"></iframe>
         </div>
         <div class="pg-card-controls">
           <button class="pg-ctrl-btn pg-sound-btn" aria-label="Toggle sound">
@@ -229,7 +229,7 @@
     <div class="pg-card">
       <div class="pg-card-inner">
         <div class="pg-embed">
-          <iframe src="https://mattjss.github.io/cloth/" scrolling="no" tabindex="-1"></iframe>
+          <iframe src="https://mattjss.github.io/cloth/?embed=1" scrolling="no" tabindex="-1"></iframe>
         </div>
         <div class="pg-card-controls">
           <button class="pg-ctrl-btn pg-sound-btn" aria-label="Toggle sound">
@@ -274,54 +274,200 @@
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 window.addEventListener('load', () => window.scrollTo(0, 0));
 
-function iframeMsg(iframe, muted) {
-  try { if (iframe) iframe.contentWindow.postMessage({ type: 'setMuted', muted }, '*'); } catch(e) {}
+// ── Portfolio Audio Engine ─────────────────────────────────────────────────
+// All audio runs at the portfolio level. Iframes are purely visual (?embed=1).
+let _pac = null;
+function pac() {
+  if (!_pac) _pac = new (window.AudioContext || window.webkitAudioContext)();
+  if (_pac.state === 'suspended') _pac.resume();
+  return _pac;
 }
 
-function muteAllIframes() {
-  document.querySelectorAll('iframe').forEach(f => {
-    try { f.contentWindow.postMessage({ type: 'setMuted', muted: true }, '*'); } catch(e) {}
-  });
+function mkNoise(c, dur) {
+  const n = Math.ceil(c.sampleRate * dur);
+  const buf = c.createBuffer(1, n, c.sampleRate);
+  const d = buf.getChannelData(0);
+  for (let i = 0; i < n; i++) d[i] = Math.random() * 2 - 1;
+  const src = c.createBufferSource(); src.buffer = buf; return src;
 }
 
-// Silence everything on load and re-silence after each iframe finishes loading
-muteAllIframes();
-document.querySelectorAll('iframe').forEach(f => {
-  f.addEventListener('load', () => setTimeout(muteAllIframes, 100));
-});
+// Sound per card index (matches querySelectorAll('.pg-card') order).
+// Returns a stop() function, or null for no sound.
+const CARD_AUDIO = [
+  // 0 · Flock — soft bird flutter clicks
+  () => {
+    let on = true;
+    const loop = () => {
+      if (!on) return;
+      const c = pac(), t = c.currentTime;
+      const osc = c.createOscillator(), g = c.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(1400 + Math.random() * 300, t);
+      osc.frequency.exponentialRampToValueAtTime(900, t + 0.055);
+      g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(0.05, t + 0.004);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.06);
+      osc.connect(g); g.connect(c.destination); osc.start(t); osc.stop(t + 0.07);
+      setTimeout(loop, 180 + Math.random() * 500);
+    };
+    loop();
+    return () => { on = false; };
+  },
+  // 1 · Spider Mesh — ripple tap
+  () => {
+    let on = true;
+    const loop = () => {
+      if (!on) return;
+      const c = pac(), t = c.currentTime;
+      const osc = c.createOscillator(), g = c.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(380 + Math.random() * 80, t);
+      osc.frequency.exponentialRampToValueAtTime(90, t + 0.09);
+      g.gain.setValueAtTime(0.06, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.1);
+      osc.connect(g); g.connect(c.destination); osc.start(t); osc.stop(t + 0.11);
+      setTimeout(loop, 350 + Math.random() * 700);
+    };
+    loop();
+    return () => { on = false; };
+  },
+  // 2 · Agentic Pixel — no sound
+  null,
+  // 3 · Sync — no sound
+  null,
+  // 4 · Satoshi — no sound
+  null,
+  // 5 · Terminal — keyboard typing loop (exact Terminal sounds)
+  () => {
+    let on = true;
+    const loop = () => {
+      if (!on) return;
+      const c = pac(), t = c.currentTime;
+      const noise = mkNoise(c, 0.005); const ng = c.createGain();
+      ng.gain.setValueAtTime(0.14, t); ng.gain.exponentialRampToValueAtTime(0.0001, t + 0.006);
+      noise.connect(ng); ng.connect(c.destination); noise.start(); noise.stop(t + 0.007);
+      const osc = c.createOscillator(), og = c.createGain();
+      osc.type = 'sine'; osc.frequency.setValueAtTime(300 + Math.random() * 60, t);
+      osc.frequency.exponentialRampToValueAtTime(80, t + 0.04);
+      og.gain.setValueAtTime(0.055, t); og.gain.exponentialRampToValueAtTime(0.0001, t + 0.045);
+      osc.connect(og); og.connect(c.destination); osc.start(); osc.stop(t + 0.05);
+      setTimeout(loop, 80 + Math.random() * 60);
+    };
+    loop();
+    return () => { on = false; };
+  },
+  // 6 · Save Button — soft hover pings
+  () => {
+    let on = true;
+    const loop = () => {
+      if (!on) return;
+      const c = pac(), t = c.currentTime;
+      const osc = c.createOscillator(), g = c.createGain();
+      osc.type = 'sine'; osc.frequency.value = 1046.5;
+      g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(0.04, t + 0.005);
+      g.gain.setTargetAtTime(0.0001, t + 0.012, 0.055);
+      osc.connect(g); g.connect(c.destination); osc.start(t); osc.stop(t + 0.2);
+      setTimeout(loop, 500 + Math.random() * 700);
+    };
+    loop();
+    return () => { on = false; };
+  },
+  // 7 · Vector — fast hover ticks
+  () => {
+    let on = true;
+    const loop = () => {
+      if (!on) return;
+      const c = pac(), t = c.currentTime;
+      const osc = c.createOscillator(), g = c.createGain();
+      osc.type = 'sine'; osc.frequency.value = 500 + Math.random() * 300;
+      g.gain.setValueAtTime(0.025, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.025);
+      osc.connect(g); g.connect(c.destination); osc.start(t); osc.stop(t + 0.03);
+      setTimeout(loop, 45 + Math.random() * 80);
+    };
+    loop();
+    return () => { on = false; };
+  },
+  // 8 · Matrix Loader — digital bleeps
+  () => {
+    let on = true;
+    const loop = () => {
+      if (!on) return;
+      const c = pac(), t = c.currentTime;
+      const osc = c.createOscillator(), g = c.createGain();
+      osc.type = 'square';
+      osc.frequency.value = [220, 330, 440, 550][Math.floor(Math.random() * 4)];
+      g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(0.012, t + 0.003);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.04);
+      osc.connect(g); g.connect(c.destination); osc.start(t); osc.stop(t + 0.045);
+      setTimeout(loop, 90 + Math.random() * 180);
+    };
+    loop();
+    return () => { on = false; };
+  },
+  // 9 · Cloth — soft fabric swish
+  () => {
+    let on = true;
+    const loop = () => {
+      if (!on) return;
+      const c = pac(), t = c.currentTime;
+      const n = Math.ceil(c.sampleRate * 0.07);
+      const buf = c.createBuffer(1, n, c.sampleRate);
+      const d = buf.getChannelData(0);
+      for (let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * Math.sin(Math.PI * i / n);
+      const src = c.createBufferSource(); src.buffer = buf;
+      const g = c.createGain();
+      g.gain.setValueAtTime(0.022, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.08);
+      src.connect(g); g.connect(c.destination); src.start(t); src.stop(t + 0.09);
+      setTimeout(loop, 250 + Math.random() * 400);
+    };
+    loop();
+    return () => { on = false; };
+  },
+  // 10 · Tactile UI — no sound
+  null,
+  // 11 · Logo Carousel — no sound
+  null,
+];
 
-document.querySelectorAll('.pg-card').forEach(card => {
+let activeStop = null; // stop function for currently playing card
+
+document.querySelectorAll('.pg-card').forEach((card, idx) => {
   const soundBtn = card.querySelector('.pg-sound-btn');
-  const iframe   = card.querySelector('iframe');
   const video    = card.querySelector('video');
-  let muted = true; // persists across hovers — click to unmute, stays unmuted
+  const soundFn  = CARD_AUDIO[idx] || null;
+  let muted = true;
 
   function updateIcon() {
     if (!soundBtn) return;
     soundBtn.querySelector('.icon-sound-on').style.display  = muted ? 'none' : '';
     soundBtn.querySelector('.icon-sound-off').style.display = muted ? '' : 'none';
   }
-
   updateIcon();
 
+  function startAudio() {
+    if (activeStop) { activeStop(); activeStop = null; }
+    if (!muted && soundFn) activeStop = soundFn();
+  }
+
+  function stopAudio() {
+    if (activeStop) { activeStop(); activeStop = null; }
+  }
+
   card.addEventListener('mouseenter', () => {
-    muteAllIframes();                              // silence every other iframe first
-    if (video) { video.muted = muted; video.play().catch(() => {}); }
-    iframeMsg(iframe, muted);                     // restore this card's preference
+    if (video) { video.muted = true; video.play().catch(() => {}); }
+    startAudio();
   });
 
   card.addEventListener('mouseleave', () => {
     if (video) { video.pause(); video.currentTime = 0; }
-    iframeMsg(iframe, true);                      // silence on leave, preserve muted pref
+    stopAudio();
   });
 
   if (soundBtn) {
     soundBtn.addEventListener('click', e => {
       e.stopPropagation();
       muted = !muted;
-      iframeMsg(iframe, muted);
-      if (video) video.muted = muted;
       updateIcon();
+      if (muted) stopAudio();
+      else if (soundFn) { if (activeStop) { activeStop(); } activeStop = soundFn(); }
     });
   }
 });
