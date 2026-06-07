@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Archives — Matt Silverman</title>
+  <meta name="description" content="A chronological archive of work in motion, interaction, and design.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;700&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .archive-wrap {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 120px 24px 80px;
+    }
+
+    .archive-year-group {
+      margin-bottom: 48px;
+    }
+
+    .archive-year {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      color: var(--social);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .archive-list {
+      list-style: none;
+      margin: 0; padding: 0;
+    }
+
+    .archive-item {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: baseline;
+      gap: 16px;
+      padding: 11px 0;
+      border-bottom: 1px solid transparent;
+      transition: border-color .15s;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .archive-item:hover {
+      border-bottom-color: var(--border);
+    }
+
+    .archive-item:hover .archive-title {
+      color: var(--fg);
+    }
+
+    .archive-title {
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--fg);
+      transition: color .15s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .archive-title::after {
+      content: '↗';
+      font-size: 11px;
+      color: var(--social);
+      opacity: 0;
+      transform: translateY(1px);
+      transition: opacity .15s;
+    }
+
+    .archive-item:hover .archive-title::after {
+      opacity: 1;
+    }
+
+    .archive-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.05em;
+      color: var(--social);
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    :root {
+      --border: #e8e8e8;
+    }
+    [data-theme=dark] {
+      --border: #1f1f1f;
+    }
+  </style>
+  <script>
+    (function(){
+      var t = localStorage.getItem('theme') || 'light';
+      document.documentElement.setAttribute('data-theme', t);
+      document.documentElement.classList.add('no-transition');
+      window.addEventListener('load', function(){
+        setTimeout(function(){ document.documentElement.classList.remove('no-transition'); }, 50);
+      });
+    })();
+  </script>
+</head>
+<body>
+
+<!-- ── TL: Orb / Home ─────────────────────────────────────────────────── -->
+<a href="index.html" class="orb" id="orb" aria-label="Home">
+  <canvas id="orb-canvas"></canvas>
+</a>
+
+<!-- ── TR: Navigation ─────────────────────────────────────────────────── -->
+<nav class="nav" aria-label="Main">
+  <a href="about.html"      class="nav-link">About</a>
+  <a href="archives.html"   class="nav-link active" aria-current="page">Archives</a>
+  <a href="playground.html" class="nav-link">Playground</a>
+</nav>
+
+<!-- ── BL: Social bar ────────────────────────────────────────────────── -->
+<div class="social-bar">
+  <a href="https://x.com/mattjss" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="X / Twitter">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+    </svg>
+  </a>
+  <a href="https://www.linkedin.com/in/matt-silverman-67126a3a/" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="LinkedIn">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+    </svg>
+  </a>
+  <a href="https://github.com/mattjss" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="GitHub">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+    </svg>
+  </a>
+  <a href="https://www.cosmos.so/mattjs" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Cosmos">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M8 0C12.4183 0 16 3.58172 16 8C16 12.4183 12.4183 16 8 16C3.58172 16 0 12.4183 0 8C0 3.58172 3.58172 0 8 0ZM8 11C7.44772 11 7 11.4477 7 12C7 12.5523 7.44772 13 8 13C8.55229 13 9 12.5523 9 12C9 11.4477 8.55229 11 8 11ZM4 9C3.44772 9 3 9.44771 3 10C3 10.5523 3.44772 11 4 11C4.55228 11 5 10.5523 5 10C5 9.44771 4.55228 9 4 9ZM12 9C11.4477 9 11 9.44771 11 10C11 10.5523 11.4477 11 12 11C12.5523 11 13 10.5523 13 10C13 9.44771 12.5523 9 12 9ZM4 5C3.44772 5 3 5.44772 3 6C3 6.55228 3.44772 7 4 7C4.55228 7 5 6.55228 5 6C5 5.44772 4.55228 5 4 5ZM12 5C11.4477 5 11 5.44772 11 6C11 6.55228 11.4477 7 12 7C12.5523 7 13 6.55228 13 6C13 5.44772 12.5523 5 12 5ZM8 3C7.44772 3 7 3.44772 7 4C7 4.55228 7.44772 5 8 5C8.55229 5 9 4.55228 9 4C9 3.44772 8.55229 3 8 3Z" fill="currentColor"/>
+    </svg>
+  </a>
+</div>
+
+<!-- ── BR: Theme toggle ───────────────────────────────────────────────── -->
+<button class="theme-cta" id="themeBtn" aria-label="Toggle theme">
+  <svg class="theme-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <mask id="tc-mask-1" fill="white">
+      <path d="M0 8C0 10.1217 0.842854 12.1566 2.34315 13.6569C3.84344 15.1571 5.87827 16 8 16C10.1217 16 12.1566 15.1571 13.6569 13.6569C15.1571 12.1566 16 10.1217 16 8L8 8H0Z"/>
+    </mask>
+    <path d="M0 8C0 10.1217 0.842854 12.1566 2.34315 13.6569C3.84344 15.1571 5.87827 16 8 16C10.1217 16 12.1566 15.1571 13.6569 13.6569C15.1571 12.1566 16 10.1217 16 8L8 8H0Z" fill="currentColor" stroke="currentColor" stroke-width="3.2" mask="url(#tc-mask-1)"/>
+    <mask id="tc-mask-2" fill="white">
+      <path d="M0 8C0 6.94942 0.206926 5.90914 0.608964 4.93853C1.011 3.96793 1.60028 3.08601 2.34315 2.34315C3.08601 1.60028 3.96793 1.011 4.93853 0.608964C5.90914 0.206926 6.94943 0 8 0C9.05058 0 10.0909 0.206926 11.0615 0.608964C12.0321 1.011 12.914 1.60028 13.6569 2.34315C14.3997 3.08601 14.989 3.96793 15.391 4.93853C15.7931 5.90914 16 6.94943 16 8H14.3996C14.3996 7.1596 14.234 6.32743 13.9124 5.551C13.5908 4.77457 13.1194 4.06908 12.5252 3.47483C11.9309 2.88058 11.2254 2.40919 10.449 2.08758C9.67257 1.76597 8.8404 1.60044 8 1.60044C7.1596 1.60044 6.32743 1.76597 5.551 2.08758C4.77457 2.40919 4.06908 2.88058 3.47483 3.47483C2.88058 4.06908 2.40919 4.77457 2.08758 5.551C1.76597 6.32743 1.60044 7.1596 1.60044 8H0Z"/>
+    </mask>
+    <path d="M0 8C0 6.94942 0.206926 5.90914 0.608964 4.93853C1.011 3.96793 1.60028 3.08601 2.34315 2.34315C3.08601 1.60028 3.96793 1.011 4.93853 0.608964C5.90914 0.206926 6.94943 0 8 0C9.05058 0 10.0909 0.206926 11.0615 0.608964C12.0321 1.011 12.914 1.60028 13.6569 2.34315C14.3997 3.08601 14.989 3.96793 15.391 4.93853C15.7931 5.90914 16 6.94943 16 8H14.3996C14.3996 7.1596 14.234 6.32743 13.9124 5.551C13.5908 4.77457 13.1194 4.06908 12.5252 3.47483C11.9309 2.88058 11.2254 2.40919 10.449 2.08758C9.67257 1.76597 8.8404 1.60044 8 1.60044C7.1596 1.60044 6.32743 1.76597 5.551 2.08758C4.77457 2.40919 4.06908 2.88058 3.47483 3.47483C2.88058 4.06908 2.40919 4.77457 2.08758 5.551C1.76597 6.32743 1.60044 7.1596 1.60044 8H0Z" fill="currentColor" stroke="currentColor" stroke-width="3.2" mask="url(#tc-mask-2)"/>
+  </svg>
+</button>
+
+<!-- ── Archives ───────────────────────────────────────────────────────── -->
+<main class="archive-wrap">
+
+  <div class="archive-year-group">
+    <div class="archive-year">2025</div>
+    <ul class="archive-list">
+      <li>
+        <a class="archive-item" href="https://mattjss.github.io/flock/" target="_blank" rel="noopener noreferrer">
+          <span class="archive-title">Flock</span>
+          <span class="archive-tag">Simulation</span>
+        </a>
+      </li>
+      <li>
+        <a class="archive-item" href="https://mattjss.github.io/Spider-Mesh/" target="_blank" rel="noopener noreferrer">
+          <span class="archive-title">Spider Mesh</span>
+          <span class="archive-tag">Interaction</span>
+        </a>
+      </li>
+      <li>
+        <a class="archive-item" href="https://mattjss.github.io/cloth/" target="_blank" rel="noopener noreferrer">
+          <span class="archive-title">Fabric</span>
+          <span class="archive-tag">Physics</span>
+        </a>
+      </li>
+      <li>
+        <a class="archive-item" href="https://mattjss.github.io/Vector/" target="_blank" rel="noopener noreferrer">
+          <span class="archive-title">Vector</span>
+          <span class="archive-tag">Simulation</span>
+        </a>
+      </li>
+      <li>
+        <a class="archive-item" href="https://mattjss.github.io/terminal/" target="_blank" rel="noopener noreferrer">
+          <span class="archive-title">Terminal</span>
+          <span class="archive-tag">Interaction</span>
+        </a>
+      </li>
+      <li>
+        <a class="archive-item" href="https://mattjss.github.io/satoshi/" target="_blank" rel="noopener noreferrer">
+          <span class="archive-title">Satoshi</span>
+          <span class="archive-tag">Data</span>
+        </a>
+      </li>
+      <li>
+        <a class="archive-item" href="https://mattjss.github.io/Sync/" target="_blank" rel="noopener noreferrer">
+          <span class="archive-title">Sync</span>
+          <span class="archive-tag">Motion</span>
+        </a>
+      </li>
+      <li>
+        <a class="archive-item" href="https://mattjss.github.io/Save-Button/" target="_blank" rel="noopener noreferrer">
+          <span class="archive-title">Save Button</span>
+          <span class="archive-tag">Micro-interaction</span>
+        </a>
+      </li>
+      <li>
+        <a class="archive-item" href="https://mattjss.github.io/Matrix-Loader/" target="_blank" rel="noopener noreferrer">
+          <span class="archive-title">Matrix Loader</span>
+          <span class="archive-tag">Motion</span>
+        </a>
+      </li>
+      <li>
+        <a class="archive-item" href="https://mattjss.github.io/Agentic-Animations-2/" target="_blank" rel="noopener noreferrer">
+          <span class="archive-title">Agentic Pixel Loaders</span>
+          <span class="archive-tag">Motion</span>
+        </a>
+      </li>
+      <li>
+        <a class="archive-item" href="https://mattjss.github.io/Logo-Carousel/" target="_blank" rel="noopener noreferrer">
+          <span class="archive-title">Logo Carousel</span>
+          <span class="archive-tag">Interaction</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+
+</main>
+
+<script src="app.js"></script>
+
+<!-- ── Nav orb shader ────────────────────────────────────────────────── -->
+<script>
+(function () {
+  const S = 60;
+  const canvas = document.getElementById('orb-canvas');
+  canvas.width = S; canvas.height = S;
+  const ctx = canvas.getContext('2d');
+  const orbEl = document.getElementById('orb');
+
+  const B8 = [
+     0,32, 8,40, 2,34,10,42,
+    48,16,56,24,50,18,58,26,
+    12,44, 4,36,14,46, 6,38,
+    60,28,52,20,62,30,54,22,
+     3,35,11,43, 1,33, 9,41,
+    51,19,59,27,49,17,57,25,
+    15,47, 7,39,13,45, 5,37,
+    63,31,55,23,61,29,53,21
+  ].map(v => v / 64);
+
+  const BASE_R = 0.86;
+  const OR = 0.72, YF = 0.46;
+  let hovered = false, angle = 1.2, speed = 0.38, gain = 0.60, specPow = 10, flash = 0, breatheT = 0, prevMs = 0;
+
+  orbEl.addEventListener('mouseenter', () => { hovered = true;  flash = 1.0; });
+  orbEl.addEventListener('mouseleave', () => { hovered = false; });
+
+  function frame(ms) {
+    const dt = Math.min((ms - prevMs) / 1000, 0.05); prevMs = ms;
+    speed   += ((hovered ? 2.8  : 0.38) - speed)   * Math.min(1, dt * 4);
+    gain    += ((hovered ? 0.90 : 0.60) - gain)     * Math.min(1, dt * 5);
+    specPow += ((hovered ? 22   : 10)   - specPow)  * Math.min(1, dt * 4);
+    flash    = Math.max(0, flash - dt * 2.5);
+    breatheT += dt * 0.55; angle += speed * dt;
+    const R = BASE_R * (1 + 0.022 * Math.sin(breatheT));
+    const lx = Math.cos(angle) * OR, ly = Math.sin(angle) * OR * YF;
+    const lz = Math.sqrt(Math.max(0, 1 - lx*lx - ly*ly));
+    const img = ctx.createImageData(S, S); const p = img.data;
+    for (let py = 0; py < S; py++) {
+      for (let px = 0; px < S; px++) {
+        const u = (px+.5)/S*2-1, v = -((py+.5)/S*2-1), r2 = u*u+v*v;
+        if (r2 > R*R) continue;
+        const sz = Math.sqrt(R*R-r2), nx = u/R, ny = v/R, nz = sz/R;
+        const ndl = Math.max(0, nx*lx+ny*ly+nz*lz);
+        const rx = 2*ndl*nx-lx, ry = 2*ndl*ny-ly, rz = 2*ndl*nz-lz;
+        const spec = Math.pow(Math.max(0, rz), specPow);
+        const rim = 0.10 * Math.pow(1-nz, 2.2);
+        const lit = (0.05+ndl*0.58+spec*0.75+rim)*gain+flash*0.30;
+        if (Math.min(1,lit) > B8[(py%8)*8+(px%8)]) {
+          const i = (py*S+px)*4; p[i]=p[i+1]=p[i+2]=0; p[i+3]=255;
+        }
+      }
+    }
+    ctx.putImageData(img, 0, 0); requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+
+</body>
+</html>

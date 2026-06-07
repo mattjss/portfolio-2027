@@ -337,7 +337,8 @@ document.querySelectorAll('.pg-card').forEach(card => {
 
   card.addEventListener('mouseenter', () => {
     stopHoverSounds();
-    if (video) { video.muted = muted; video.play().catch(()=>{}); }
+    // Only unmute video if this card has sound type; visual-only cards stay muted
+    if (video) { video.muted = soundType ? muted : true; video.play().catch(()=>{}); }
   });
 
   card.addEventListener('mouseleave', () => {
